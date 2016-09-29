@@ -15,11 +15,16 @@ public class TypeSnmpV3 implements TypeSnmp {
     private final String hashPassword;
     private final int securityLevel;
 
+    private final TypeHash typeHash;
+    private final TypeEncypt typeEncypt;
+
     public TypeSnmpV3(Map<String, String> type) {
         hashPassword = type.get("hashPassword");
         encyptonPassword = type.get("encryptionPassword");
         username = type.get("username");
-        this.securityLevel = setSecurityLevel(type);
+        securityLevel = setSecurityLevel(type);
+        typeHash = TypeHash.valueOf(type.get("typeHash"));
+        typeEncypt = TypeEncypt.valueOf(type.get("typeEncript"));
     }
 
     @Override
@@ -38,13 +43,13 @@ public class TypeSnmpV3 implements TypeSnmp {
     }
 
     @Override
-    public String typeHash() {
-        return null;
+    public TypeHash typeHash() {
+        return typeHash;
     }
 
     @Override
-    public String typeEncript() {
-        return null;
+    public TypeEncypt typeEncript() {
+        return typeEncypt;
     }
 
     @Override
@@ -55,8 +60,20 @@ public class TypeSnmpV3 implements TypeSnmp {
 
 
     public int setSecurityLevel(Map<String,String> map) {
-        if (map.get("hashPassword") == null) return SecurityLevel.NOAUTH_NOPRIV;
-        if (map.get("EncryptPassword") == null) return SecurityLevel.AUTH_NOPRIV;
+        if (username == null) return SecurityLevel.NOAUTH_NOPRIV;
+        if (encyptonPassword == null) return SecurityLevel.AUTH_NOPRIV;
         return SecurityLevel.AUTH_PRIV;
+    }
+
+    @Override
+    public String toString() {
+        return "TypeSnmpV3{" +
+                "username='" + username + '\'' +
+                ", encyptonPassword='" + encyptonPassword + '\'' +
+                ", hashPassword='" + hashPassword + '\'' +
+                ", securityLevel=" + securityLevel +
+                ", typeHash=" + typeHash +
+                ", typeEncypt=" + typeEncypt +
+                '}';
     }
 }

@@ -1,5 +1,3 @@
-import java.util.Map;
-
 public interface TypeSnmp {
     String getEncryptionPassword();
 
@@ -7,9 +5,9 @@ public interface TypeSnmp {
 
     String getUsername();
 
-    String typeHash();
+    TypeHash typeHash();
 
-    String typeEncript();
+    TypeEncypt typeEncript();
 
     String getCommunity();
 

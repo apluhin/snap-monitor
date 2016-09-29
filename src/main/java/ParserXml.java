@@ -17,13 +17,13 @@ public class ParserXml {
         SAXReader reader = new SAXReader();
         Document document = reader.read(file);
         treeWalk(document);
-        // Do something with the document here.
     }
 
-    public static void treeWalk(Document document) {
+    public static Device treeWalk(Document document) {
         Map<String, String> map = new HashMap<String, String>();
         treeWalk(document.getRootElement(), map);
         Device device = new Device(map.get("vendor"), map.get("addres"), new Snmp(map));
+        return device;
     }
 
     public static void treeWalk(Element element, Map<String, String> map) {
@@ -38,10 +38,6 @@ public class ParserXml {
                 }
             }
         }
-        for (Map.Entry<String, String> stringStringEntry : map.entrySet()) {
-            System.out.println(stringStringEntry.getKey() + " " + stringStringEntry.getValue());
-        }
-
     }
 }
 

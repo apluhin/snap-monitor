@@ -21,11 +21,11 @@ public class Snmp {
         return typeSnmp.getUsername();
     }
 
-    public String getTypeHash() {
+    public TypeHash getTypeHash() {
         return typeSnmp.typeHash();
     }
 
-    public String getTypeEncript() {
+    public TypeEncypt getTypeEncript() {
         return typeSnmp.typeEncript();
     }
 
@@ -33,4 +33,10 @@ public class Snmp {
         return typeSnmp.getCommunity();
     }
 
+    @Override
+    public String toString() {
+        return "Snmp{" +
+                "typeSnmp=" + typeSnmp.toString() +
+                '}';
+    }
 }

@@ -23,12 +23,12 @@ public class TypeSnmpV2 implements TypeSnmp {
     }
 
     @Override
-    public String typeHash() {
+    public TypeHash typeHash() {
         return null;
     }
 
     @Override
-    public String typeEncript() {
+    public TypeEncypt typeEncript() {
         return null;
     }
 
