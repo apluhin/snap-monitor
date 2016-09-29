@@ -24,8 +24,6 @@ public class ParserXml {
         Map<String, String> map = new HashMap<String, String>();
         treeWalk(document.getRootElement(), map);
         Device device = new Device(map.get("vendor"), map.get("addres"), new Snmp(map));
-        System.out.println(device.getSnmp().getEncryptionPassword());
-
     }
 
     public static void treeWalk(Element element, Map<String, String> map) {

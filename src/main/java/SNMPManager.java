@@ -7,6 +7,8 @@ import org.snmp4j.security.*;
 import org.snmp4j.smi.*;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 
+import java.io.IOException;
+
 public class SNMPManager {
     private static String ipAddress = "192.168.0.2";
 
@@ -22,6 +24,13 @@ public class SNMPManager {
     public static void main(String[] args) throws Exception {
         // add user to the USM
 
+
+
+
+    }
+
+
+    public ResponseEvent sendRequest(String ipAddress, SnmpConstants version, SecurityLevel securityLevel, UsmUser usmUser) throws IOException {
         Address targetAddress = GenericAddress.parse("udp:192.168.0.1/161");
         TransportMapping transport = new DefaultUdpTransportMapping();
         Snmp snmp = new Snmp(transport);
@@ -38,8 +47,6 @@ public class SNMPManager {
                         PrivDES.ID,
                         new OctetString("EncryptionPassw0rd")));
 
-
-        // create the target
         UserTarget target = new UserTarget();
         target.setAddress(targetAddress);
         target.setRetries(1);
@@ -48,83 +55,13 @@ public class SNMPManager {
         target.setSecurityLevel(SecurityLevel.AUTH_PRIV);
         target.setSecurityName(new OctetString("operator"));
 
-
-        // create the PDU
         ScopedPDU pdu = new ScopedPDU();
         pdu.add(new VariableBinding(new OID("1.3.6")));
         pdu.setType(PDU.GETNEXT);
 
-        // send the PDU
         ResponseEvent response = snmp.send(pdu, target);
-        // extract the response PDU (could be null if timed out)
         PDU responsePDU = response.getResponse();
-        // extract the address used by the agent to send the response:
-        System.out.println(response.getResponse().getVariableBindings());
 
-
-        //   oidValue = new BufferedReader(new InputStreamReader(System.in)).readLine();
-//        System.out.println("SNMP GET Demo");
-//        USM usm = new USM(SecurityProtocols.getInstance(), new OctetString(
-//                MPv3.createLocalEngineID()),0);
-//
-//         // Create TransportMapping and Listen
-//        TransportMapping transport = new DefaultUdpTransportMapping();
-//        transport.listen();
-//
-//        // Create Target Address object
-//        CommunityTarget comtarget = new CommunityTarget();
-//
-//        comtarget.setCommunity(new OctetString(community));
-//        comtarget.setVersion(snmpVersion);
-//        comtarget.setAddress(new UdpAddress(ipAddress + "/" + port));
-//        comtarget.setRetries(1);
-//        comtarget.setTimeout(1000);
-//        comtarget.setSecurityModel(3);
-//
-//        // Create the PDU object
-//        ScopedPDU pdu = new ScopedPDU();
-//        pdu.add(new VariableBinding(new OID(oidValue)));
-//        pdu.setType(PDU.GET);
-//        pdu.setRequestID(new Integer32(1));
-//
-//        // Create Snmp object for sending data to Agent
-//        Snmp snmp = new Snmp(transport);
-//        System.out.println("Sending Request to Agent...");
-//        ResponseEvent response = snmp.get(pdu, comtarget);
-//
-//        // Process Agent Response
-//        if (response != null)
-//        {
-//            System.out.println("Got Response from Agent");
-//            PDU responsePDU = response.getResponse();
-//
-//            if (responsePDU != null)
-//            {
-//                int errorStatus = responsePDU.getErrorStatus();
-//                int errorIndex = responsePDU.getErrorIndex();
-//                String errorStatusText = responsePDU.getErrorStatusText();
-//
-//                if (errorStatus == PDU.noError)
-//                {
-//                    System.out.println("Snmp Get Response = " + responsePDU.getVariableBindings());
-//                }
-//                else
-//                {
-//                    System.out.println("Error: Request Failed");
-//                    System.out.println("Error Status = " + errorStatus);
-//                    System.out.println("Error Index = " + errorIndex);
-//                    System.out.println("Error Status Text = " + errorStatusText);
-//                }
-//            }
-//            else
-//            {
-//                System.out.println("Error: Response PDU is null");
-//            }
-//        }
-//        else
-//        {
-//            System.out.println("Error: Agent Timeout... ");
-//        }
-//        snmp.close();
+        return response;
     }
 }

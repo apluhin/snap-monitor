@@ -2,39 +2,35 @@ import java.util.Map;
 
 public class Snmp {
 
-    private final VersionSnmp versionSnmp;
+    private final TypeSnmp typeSnmp;
 
 
     public Snmp(Map<String, String> map) {
-        versionSnmp = Version.valueOf(map.get("version"));
-        versionSnmp.setMap(map);
+        typeSnmp = Type.valueOf(map.get("version")).getType(map);
     }
 
     public String getEncryptionPassword() {
-        return versionSnmp.getEncryptionPassword();
+        return typeSnmp.getEncryptionPassword();
     }
 
     public String getHashPassword() {
-        return versionSnmp.getHashPassword();
+        return typeSnmp.getHashPassword();
     }
 
     public String getUsername() {
-        return versionSnmp.getUsername();
+        return typeSnmp.getUsername();
     }
 
     public String getTypeHash() {
-        return versionSnmp.typeHash();
+        return typeSnmp.typeHash();
     }
 
     public String getTypeEncript() {
-        return versionSnmp.typeEncript();
+        return typeSnmp.typeEncript();
     }
 
     public String getCommunity() {
-        return versionSnmp.getCommunity();
+        return typeSnmp.getCommunity();
     }
 
-    public void setMap(Map<String, String> map) {
-        versionSnmp.setMap(map);
-    }
 }

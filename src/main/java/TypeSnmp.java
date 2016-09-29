@@ -1,6 +1,6 @@
 import java.util.Map;
 
-public interface VersionSnmp {
+public interface TypeSnmp {
     String getEncryptionPassword();
 
     String getHashPassword();
@@ -13,5 +13,5 @@ public interface VersionSnmp {
 
     String getCommunity();
 
-    void setMap(Map<String, String> map);
+
 }
