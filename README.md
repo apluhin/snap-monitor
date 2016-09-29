@@ -5,7 +5,7 @@ SNMP MONITOR
 ### What is this repository for? ###
 
 * Begin work
-* Type
+* enums.Type
 * [Learn Markdown](https://bitbucket.org/tutorials/markdowndemo)
 
 ### How do I get set up? ###

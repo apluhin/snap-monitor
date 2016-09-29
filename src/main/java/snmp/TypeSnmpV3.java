@@ -1,3 +1,7 @@
+package snmp;
+
+import enums.TypeEncypt;
+import enums.TypeHash;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.security.SecurityLevel;
 
@@ -67,7 +71,7 @@ public class TypeSnmpV3 implements TypeSnmp {
 
     @Override
     public String toString() {
-        return "TypeSnmpV3{" +
+        return "snmp.TypeSnmpV3{" +
                 "username='" + username + '\'' +
                 ", encyptonPassword='" + encyptonPassword + '\'' +
                 ", hashPassword='" + hashPassword + '\'' +

@@ -1,3 +1,10 @@
+package snmp;
+
+import enums.Type;
+import enums.TypeEncypt;
+import enums.TypeHash;
+import snmp.TypeSnmp;
+
 import java.util.Map;
 
 public class Snmp {
@@ -35,8 +42,8 @@ public class Snmp {
 
     @Override
     public String toString() {
-        return "Snmp{" +
-                "typeSnmp=" + typeSnmp.toString() +
+        return "snmp.Snmp{" +
+                "snmp=" + typeSnmp.toString() +
                 '}';
     }
 }

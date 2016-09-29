@@ -3,22 +3,30 @@ import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
+import snmp.Snmp;
 
 import java.io.File;
 import java.util.*;
 
 
 public class ParserXml {
-    private static final String REPORTS_DIRECTORY = System.getProperty("user.home") + "/reports";
+    private final File file;
 
-    public static void main(String[] args) throws DocumentException {
-        File file = new File(REPORTS_DIRECTORY, "snmp3.xml");
-        SAXReader reader = new SAXReader();
-        Document document = reader.read(file);
-        treeWalk(document);
+    public ParserXml(File file) {
+        this.file = file;
     }
 
-    public static List<Device> treeWalk(Document document) {
+
+    public static void main(String[] args) throws DocumentException {
+        ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home") + "/reports", "snmp3.xml"));
+        List<Device> devices = parserXml.treeWalk();
+        System.out.println(devices);
+
+    }
+
+    public List<Device> treeWalk() throws DocumentException {
+        SAXReader reader = new SAXReader();
+        Document document = reader.read(file);
         List<Device> deviceList = new ArrayList<>();
         Iterator i = document.getRootElement().elementIterator();
         while (i.hasNext()) {
@@ -30,8 +38,7 @@ public class ParserXml {
         return deviceList;
     }
 
-    public static void treeWalk(Element element, Map<String, String> map) {
-
+    public void treeWalk(Element element, Map<String, String> map) {
         for (int i = 0, size = element.nodeCount(); i < size; i++) {
             Node node = element.node(i);
             if (node instanceof Element) {

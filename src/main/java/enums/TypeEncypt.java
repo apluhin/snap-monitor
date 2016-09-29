@@ -1,3 +1,5 @@
+package enums;
+
 import org.snmp4j.security.PrivDES;
 import org.snmp4j.smi.OID;
 

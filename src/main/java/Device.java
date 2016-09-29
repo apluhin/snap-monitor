@@ -1,3 +1,5 @@
+import snmp.Snmp;
+
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 

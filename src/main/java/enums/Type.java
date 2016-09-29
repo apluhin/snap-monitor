@@ -1,3 +1,10 @@
+package enums;
+
+import snmp.TypeSnmp;
+import snmp.TypeSnmpV1;
+import snmp.TypeSnmpV2;
+import snmp.TypeSnmpV3;
+
 import java.util.Map;
 
 public enum Type  {

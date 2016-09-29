@@ -1,3 +1,8 @@
+package snmp;
+
+import enums.TypeEncypt;
+import enums.TypeHash;
+
 import java.util.Map;
 
 /**
