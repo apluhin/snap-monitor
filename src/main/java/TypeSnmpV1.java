@@ -13,28 +13,24 @@ public class TypeSnmpV1 implements TypeSnmp {
 
     @Override
     public String getEncryptionPassword() {
-        throw new UnsupportedOperationException("Use snmpV3");
+        throw new UnsupportedOperationException("This version of snmp doest support");
     }
 
     @Override
     public String getHashPassword() {
-        throw new UnsupportedOperationException("Use snmpV3");
-    }
+        throw new UnsupportedOperationException("This version of snmp doest support");    }
 
     @Override
     public String getUsername() {
-        throw new UnsupportedOperationException("Use snmpV3");
-    }
+        throw new UnsupportedOperationException("This version of snmp doest support");    }
 
     @Override
     public TypeHash typeHash() {
-        throw new UnsupportedOperationException("Use snmpV3");
-    }
+        throw new UnsupportedOperationException("This version of snmp doest support");    }
 
     @Override
     public TypeEncypt typeEncript() {
-        throw new UnsupportedOperationException("Use snmpV3");
-    }
+        throw new UnsupportedOperationException("This version of snmp doest support");    }
 
     @Override
     public String getCommunity() {
