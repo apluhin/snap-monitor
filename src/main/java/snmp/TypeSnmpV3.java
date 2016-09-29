@@ -4,6 +4,7 @@ import enums.TypeEncypt;
 import enums.TypeHash;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.security.SecurityLevel;
+import org.snmp4j.smi.OID;
 
 import java.util.Map;
 
@@ -61,6 +62,15 @@ public class TypeSnmpV3 implements TypeSnmp {
         throw new UnsupportedOperationException("Use Authentication v3");
     }
 
+    @Override
+    public int getVersion() {
+        return version;
+    }
+
+    @Override
+    public int getSecurityLevel() {
+        return securityLevel;
+    }
 
 
     public int setSecurityLevel(Map<String,String> map) {
@@ -68,6 +78,7 @@ public class TypeSnmpV3 implements TypeSnmp {
         if (encyptonPassword == null) return SecurityLevel.AUTH_NOPRIV;
         return SecurityLevel.AUTH_PRIV;
     }
+
 
     @Override
     public String toString() {

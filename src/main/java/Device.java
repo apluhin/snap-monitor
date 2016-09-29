@@ -1,4 +1,4 @@
-import snmp.Snmp;
+import snmp.SnmpDevice;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -7,12 +7,12 @@ public class Device {
 
     private final String vendor;
     private final InetAddress address;
-    private final Snmp snmp;
+    private final SnmpDevice snmpDevice;
 
-    public Device(String vendor, String address, Snmp snmp) {
+    public Device(String vendor, String address, SnmpDevice snmpDevice) {
         this.vendor = vendor;
         this.address = getAdress(address);
-        this.snmp = snmp;
+        this.snmpDevice = snmpDevice;
     }
 
     private InetAddress getAdress(String address)  {
@@ -24,8 +24,8 @@ public class Device {
 
     }
 
-    public Snmp getSnmp() {
-        return snmp;
+    public SnmpDevice getSnmpDevice() {
+        return snmpDevice;
     }
 
     public String getVendor() {
@@ -41,7 +41,7 @@ public class Device {
         return "Device{" +
                 "vendor='" + vendor + '\'' +
                 ", address='" + address + '\'' +
-                ", snmp=" + snmp.toString() +
+                ", snmpDevice=" + snmpDevice.toString() +
                 '}';
     }
 }

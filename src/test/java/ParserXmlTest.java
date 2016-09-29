@@ -24,7 +24,7 @@ public class ParserXmlTest {
         File file = new File(REPORTS_DIRECTORY, "snmp1.xml");
         ParserXml parserXml = new ParserXml(file);
         Device device = parserXml.treeWalk().get(0);
-        assertEquals("public", device.getSnmp().getCommunity());
+        assertEquals("public", device.getSnmpDevice().getCommunity());
         assertEquals(InetAddress.getByName("192.168.0.10").toString(), device.getAddress().toString());
     }
 
@@ -33,10 +33,10 @@ public class ParserXmlTest {
         File file = new File(REPORTS_DIRECTORY, "snmp.xml");
         ParserXml parserXml = new ParserXml(file);
         Device device = parserXml.treeWalk().get(0);
-        assertEquals("operator", device.getSnmp().getUsername());
+        assertEquals("operator", device.getSnmpDevice().getUsername());
         assertEquals("Cisco", device.getVendor());
         assertEquals(InetAddress.getByName("192.168.0.1").toString(), device.getAddress().toString());
-        assertEquals("EncryptionPassw0rd", device.getSnmp().getEncryptionPassword());
+        assertEquals("EncryptionPassw0rd", device.getSnmpDevice().getEncryptionPassword());
     }
 
     @Test

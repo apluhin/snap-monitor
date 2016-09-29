@@ -7,12 +7,12 @@ import snmp.TypeSnmp;
 
 import java.util.Map;
 
-public class Snmp {
+public class SnmpDevice {
 
     private final TypeSnmp typeSnmp;
 
 
-    public Snmp(Map<String, String> map) {
+    public SnmpDevice(Map<String, String> map) {
         typeSnmp = Type.valueOf(map.get("version")).getType(map);
     }
 
@@ -40,9 +40,17 @@ public class Snmp {
         return typeSnmp.getCommunity();
     }
 
+    public int getVersion() {
+        return typeSnmp.getVersion();
+    }
+
+    public int getSecurityLevel() {
+        return typeSnmp.getSecurityLevel();
+    }
+
     @Override
     public String toString() {
-        return "snmp.Snmp{" +
+        return "snmp.SnmpDevice{" +
                 "snmp=" + typeSnmp.toString() +
                 '}';
     }

@@ -6,10 +6,10 @@ import org.snmp4j.smi.OID;
 public enum  TypeHash {
     MD5 {
         @Override
-        public OID getTypeHash() {
+        public OID getMethodHash() {
             return AuthMD5.ID;
         }
     };
 
-    public abstract OID getTypeHash();
+    public abstract OID getMethodHash();
 }

@@ -41,4 +41,14 @@ public class TypeSnmpV2 implements TypeSnmp {
     public String getCommunity() {
         return null;
     }
+
+    @Override
+    public int getVersion() {
+        return 0;
+    }
+
+    @Override
+    public int getSecurityLevel() {
+        return 0;
+    }
 }

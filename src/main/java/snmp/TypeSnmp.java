@@ -2,6 +2,7 @@ package snmp;
 
 import enums.TypeEncypt;
 import enums.TypeHash;
+import org.snmp4j.smi.OID;
 
 public interface TypeSnmp {
     String getEncryptionPassword();
@@ -15,6 +16,10 @@ public interface TypeSnmp {
     TypeEncypt typeEncript();
 
     String getCommunity();
+
+    int getVersion();
+
+    int getSecurityLevel();
 
 
 }

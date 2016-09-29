@@ -30,38 +30,16 @@ public class SNMPManager {
     }
 
 
-    public ResponseEvent sendRequest(String ipAddress, SnmpConstants version, SecurityLevel securityLevel, UsmUser usmUser) throws IOException {
-        Address targetAddress = GenericAddress.parse("udp:192.168.0.1/161");
-        TransportMapping transport = new DefaultUdpTransportMapping();
-        Snmp snmp = new Snmp(transport);
-        USM usm = new USM(SecurityProtocols.getInstance(),
-                new OctetString(MPv3.createLocalEngineID()), 0);
-
-        SecurityModels.getInstance().addSecurityModel(usm);
-        transport.listen();
-
-        snmp.getUSM().addUser(new OctetString("operator"),
-                new UsmUser(new OctetString("operator"),
-                        AuthMD5.ID,
-                        new OctetString("AuthPassw0rd"),
-                        PrivDES.ID,
-                        new OctetString("EncryptionPassw0rd")));
-
-        UserTarget target = new UserTarget();
-        target.setAddress(targetAddress);
-        target.setRetries(1);
-        target.setTimeout(1000);
-        target.setVersion(SnmpConstants.version3);
-        target.setSecurityLevel(SecurityLevel.AUTH_PRIV);
-        target.setSecurityName(new OctetString("operator"));
-
+    public ResponseEvent sendRequest(Device device) throws IOException {
+        BuildQuery request = new BuildQuery(device);
+        Snmp snmp = request.buildQuery();
+        Target target = new BuildTarget().generate(device);
+        //TODO PDU generate
         ScopedPDU pdu = new ScopedPDU();
         pdu.add(new VariableBinding(new OID("1.3.6")));
         pdu.setType(PDU.GETNEXT);
-
         ResponseEvent response = snmp.send(pdu, target);
         PDU responsePDU = response.getResponse();
-
         return response;
     }
 }
