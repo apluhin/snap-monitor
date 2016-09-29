@@ -8,8 +8,8 @@ import java.util.Map;
 /**
  * Created by alexey on 29.09.16.
  */
-public class TypeSnmpV2 implements TypeSnmp {
-    public TypeSnmpV2(Map<String, String> type) {
+public class SnmpV2 implements VersionSnmp {
+    public SnmpV2(Map<String, String> type) {
     }
 
     @Override

@@ -11,11 +11,11 @@ public class Device {
 
     public Device(String vendor, String address, SnmpDevice snmpDevice) {
         this.vendor = vendor;
-        this.address = getAdress(address);
+        this.address = getAddress(address);
         this.snmpDevice = snmpDevice;
     }
 
-    private InetAddress getAdress(String address)  {
+    private InetAddress getAddress(String address)  {
         try {
             return InetAddress.getByName(address);
         } catch (UnknownHostException e) {

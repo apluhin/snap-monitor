@@ -1,57 +1,56 @@
 package snmp;
 
-import enums.Type;
+import enums.TypeV;
 import enums.TypeEncypt;
 import enums.TypeHash;
-import snmp.TypeSnmp;
 
 import java.util.Map;
 
 public class SnmpDevice {
 
-    private final TypeSnmp typeSnmp;
+    private final VersionSnmp versionSnmp;
 
 
     public SnmpDevice(Map<String, String> map) {
-        typeSnmp = Type.valueOf(map.get("version")).getType(map);
+        versionSnmp = TypeV.valueOf(map.get("version")).getType(map);
     }
 
     public String getEncryptionPassword() {
-        return typeSnmp.getEncryptionPassword();
+        return versionSnmp.getEncryptionPassword();
     }
 
     public String getHashPassword() {
-        return typeSnmp.getHashPassword();
+        return versionSnmp.getHashPassword();
     }
 
     public String getUsername() {
-        return typeSnmp.getUsername();
+        return versionSnmp.getUsername();
     }
 
     public TypeHash getTypeHash() {
-        return typeSnmp.typeHash();
+        return versionSnmp.typeHash();
     }
 
     public TypeEncypt getTypeEncript() {
-        return typeSnmp.typeEncript();
+        return versionSnmp.typeEncript();
     }
 
     public String getCommunity() {
-        return typeSnmp.getCommunity();
+        return versionSnmp.getCommunity();
     }
 
     public int getVersion() {
-        return typeSnmp.getVersion();
+        return versionSnmp.getVersion();
     }
 
     public int getSecurityLevel() {
-        return typeSnmp.getSecurityLevel();
+        return versionSnmp.getSecurityLevel();
     }
 
     @Override
     public String toString() {
         return "snmp.SnmpDevice{" +
-                "snmp=" + typeSnmp.toString() +
+                "snmp=" + versionSnmp.toString() +
                 '}';
     }
 }

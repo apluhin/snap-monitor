@@ -4,7 +4,7 @@ import enums.TypeEncypt;
 import enums.TypeHash;
 import org.snmp4j.smi.OID;
 
-public interface TypeSnmp {
+public interface VersionSnmp {
     String getEncryptionPassword();
 
     String getHashPassword();

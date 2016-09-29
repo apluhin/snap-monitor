@@ -4,14 +4,13 @@ import enums.TypeEncypt;
 import enums.TypeHash;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.security.SecurityLevel;
-import org.snmp4j.smi.OID;
 
 import java.util.Map;
 
 /**
  * Created by alexey on 29.09.16.
  */
-public class TypeSnmpV3 implements TypeSnmp {
+public class SnmpV3 implements VersionSnmp {
 
     private static int version = SnmpConstants.version3;
 
@@ -23,7 +22,7 @@ public class TypeSnmpV3 implements TypeSnmp {
     private final TypeHash typeHash;
     private final TypeEncypt typeEncypt;
 
-    public TypeSnmpV3(Map<String, String> type) {
+    public SnmpV3(Map<String, String> type) {
         hashPassword = type.get("hashPassword");
         encyptonPassword = type.get("encryptionPassword");
         username = type.get("username");
@@ -82,7 +81,7 @@ public class TypeSnmpV3 implements TypeSnmp {
 
     @Override
     public String toString() {
-        return "snmp.TypeSnmpV3{" +
+        return "snmp.SnmpV3{" +
                 "username='" + username + '\'' +
                 ", encyptonPassword='" + encyptonPassword + '\'' +
                 ", hashPassword='" + hashPassword + '\'' +

@@ -8,11 +8,11 @@ import java.util.Map;
 /**
  * Created by alexey on 29.09.16.
  */
-public class TypeSnmpV1 implements TypeSnmp {
+public class SnmpV1 implements VersionSnmp {
 
     private final String community;
 
-    public TypeSnmpV1(Map<String, String> type) {
+    public SnmpV1(Map<String, String> type) {
         community = type.get("community");
     }
 
