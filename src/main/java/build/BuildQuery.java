@@ -8,10 +8,9 @@ import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.security.SecurityModels;
 import org.snmp4j.security.SecurityProtocols;
 import org.snmp4j.security.USM;
-import org.snmp4j.security.UsmUser;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
-import snmp.SnmpDevice;
+import snmp.GenerateUsmUser;
 
 import java.io.IOException;
 
@@ -43,15 +42,7 @@ public class BuildQuery {
         USM usm = new USM(SecurityProtocols.getInstance(),
                 new OctetString(MPv3.createLocalEngineID()), 0);
         SecurityModels.getInstance().addSecurityModel(usm);
-        SnmpDevice s = device.getSnmpDevice();
-        snmp.getUSM().addUser(
-                new OctetString(s.getUsername()),
-                new UsmUser(new OctetString(
-                        s.getUsername()),
-                        s.getTypeEncript().getMethodEncrypt(),
-                        new OctetString(s.getHashPassword()),
-                        s.getTypeEncript().getMethodEncrypt(),
-                        new OctetString(s.getEncryptionPassword())));
+        snmp.getUSM().addUser(new GenerateUsmUser(device.getSnmpDevice()).generateUsmUser());
 
     }
 }

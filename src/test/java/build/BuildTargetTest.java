@@ -37,4 +37,19 @@ public class BuildTargetTest {
         Assert.assertEquals(generate.getSecurityName().toString(), snmpDevice.getUsername());
 
     }
+
+    @Test
+    public void testGenerateTargetSnmpV3WithoutDes() throws Exception {
+        ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home") + "/reports", "snmp.xml"));
+        List<Device> devices = parserXml.treeWalk();
+        SnmpDevice snmpDevice = devices.get(1).getSnmpDevice();
+        Target generate = new BuildTarget().generate(devices.get(1));
+        Assert.assertEquals(generate.getSecurityLevel(), snmpDevice.getSecurityLevel());
+        Assert.assertEquals(devices.get(1).getAddress().getHostAddress() + "/161", generate.getAddress().toString());
+        Assert.assertEquals(generate.getVersion(), snmpDevice.getVersion());
+        Assert.assertEquals(generate.getSecurityName().toString(), snmpDevice.getUsername());
+
+    }
+
+
 }

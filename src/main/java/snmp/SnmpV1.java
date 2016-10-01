@@ -2,6 +2,7 @@ package snmp;
 
 import enums.TypeEncypt;
 import enums.TypeHash;
+import org.snmp4j.mp.SnmpConstants;
 
 import java.util.Map;
 
@@ -11,6 +12,7 @@ import java.util.Map;
 public class SnmpV1 implements VersionSnmp {
 
     private final String community;
+    private final static int version = SnmpConstants.version1;
 
     public SnmpV1(Map<String, String> type) {
         community = type.get("community");
@@ -44,7 +46,7 @@ public class SnmpV1 implements VersionSnmp {
 
     @Override
     public int getVersion() {
-        return 0;
+        return version;
     }
 
     @Override

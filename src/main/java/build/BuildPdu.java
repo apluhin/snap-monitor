@@ -10,7 +10,7 @@ public class BuildPdu {
 
     public PDU getGeneratePdu(int targetVersion, OID oid, int versionPdu) {
         PDU pdu;
-        pdu = targetVersion == SnmpConstants.version1 ? new PDU() : new ScopedPDU();
+        pdu = (targetVersion == SnmpConstants.version3) ? new ScopedPDU() : new PDU();
         pdu.add(new VariableBinding(oid));
         pdu.setType(versionPdu);
         return pdu;

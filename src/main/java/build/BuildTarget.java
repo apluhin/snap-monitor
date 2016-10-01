@@ -15,16 +15,14 @@ public class BuildTarget {
 
     public Target generate(Device device) {
         Target target;
-        if(device.getSnmpDevice().getVersion() == SnmpConstants.version3) {
-            target = generateSecureTarget(device);
-        } else {
+        if (device.getSnmpDevice().getVersion() == SnmpConstants.version1) {
             target = generateCommunityTarget(device);
+        } else {
+            target = generateSecureTarget(device);
         }
         target.setAddress(GenericAddress.parse("udp:" + device.getAddress().toString() + "/161"));
         target.setRetries(3);
         target.setTimeout(500);
-        target.setVersion(device.getSnmpDevice().getVersion());
-
         return target;
     }
 

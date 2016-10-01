@@ -27,8 +27,18 @@ public class SnmpV3 implements VersionSnmp {
         encyptonPassword = type.get("encryptionPassword");
         username = type.get("username");
         securityLevel = setSecurityLevel(type);
-        typeHash = TypeHash.valueOf(type.get("typeHash"));
-        typeEncypt = TypeEncypt.valueOf(type.get("typeEncript"));
+        typeHash = getTypeHash(type);
+        typeEncypt = getTypeEncript(type);
+    }
+
+    private TypeEncypt getTypeEncript(Map<String, String> type) {
+        if(type.get("typeEncript") == null) return null;
+        return TypeEncypt.valueOf(type.get("typeEncript"));
+    }
+
+    private TypeHash getTypeHash(Map<String, String> type) {
+        if(type.get("typeHash") == null) return null;
+        return TypeHash.valueOf(type.get("typeHash"));
     }
 
     @Override

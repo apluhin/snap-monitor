@@ -18,7 +18,8 @@ public class SNMPManager {
     public static void main(String[] args) throws Exception {
         ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home")  + "/reports", "snmp3.xml"));
         List<Device> devices = parserXml.treeWalk();
-        ResponseEvent responseEvent = new SNMPManager().sendRequest(devices.get(0), new OID(".1.3.6.1.2.1.1.3.0"), PDU.GET);
+        ResponseEvent responseEvent = new SNMPManager().sendRequest(devices.get(1), new OID(".1.3.6.1.4.1.9.2.1.8.0"), PDU.GET);
+        System.out.println(responseEvent.getResponse().getVariableBindings());
     }
 
 
