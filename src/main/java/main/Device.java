@@ -1,3 +1,5 @@
+package main;
+
 import snmp.SnmpDevice;
 
 import java.net.InetAddress;
@@ -38,7 +40,7 @@ public class Device {
 
     @Override
     public String toString() {
-        return "Device{" +
+        return "main.Device{" +
                 "vendor='" + vendor + '\'' +
                 ", address='" + address + '\'' +
                 ", snmpDevice=" + snmpDevice.toString() +

@@ -1,3 +1,5 @@
+package main;
+
 import org.dom4j.Document;
 import org.junit.After;
 import org.junit.Before;
@@ -50,6 +52,7 @@ public class ParserXmlTest {
         assertNotEquals(devices.get(0).getAddress().toString(), devices.get(1).getAddress().toString());
 
     }
+
 
     @After
     public void tearDown() throws Exception {

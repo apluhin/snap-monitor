@@ -1,13 +1,14 @@
-import org.snmp4j.ScopedPDU;
+package build;
+
+import main.Device;
 import org.snmp4j.Snmp;
-import org.snmp4j.Target;
 import org.snmp4j.TransportMapping;
-import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.mp.MPv3;
 import org.snmp4j.mp.SnmpConstants;
-import org.snmp4j.security.*;
-import org.snmp4j.smi.Address;
-import org.snmp4j.smi.GenericAddress;
+import org.snmp4j.security.SecurityModels;
+import org.snmp4j.security.SecurityProtocols;
+import org.snmp4j.security.USM;
+import org.snmp4j.security.UsmUser;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 import snmp.SnmpDevice;
