@@ -10,7 +10,14 @@ public enum  EnumUsm {
     AUTH_PRIV("3") {
         @Override
         public UsmUser genetateUsm(SnmpDevice snmpDevice) {
-            return null;
+            UsmUser usmUser = new UsmUser(
+                    new OctetString(snmpDevice.getUsername()),
+                    snmpDevice.getTypeHash().getMethodHash(),
+                    new OctetString(snmpDevice.getHashPassword()),
+                    snmpDevice.getTypeEncript().getMethodEncrypt(),
+                    new OctetString(snmpDevice.getEncryptionPassword())
+            );
+            return usmUser;
         }
     },
     AUTH_NOPRIV("2") {

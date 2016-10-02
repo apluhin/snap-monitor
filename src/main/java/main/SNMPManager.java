@@ -3,6 +3,8 @@ package main;
 import build.BuildPdu;
 import build.BuildQuery;
 import build.BuildTarget;
+import mib.Command;
+import mib.ParseMib;
 import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.Target;
@@ -16,9 +18,10 @@ import java.util.List;
 public class SNMPManager {
 
     public static void main(String[] args) throws Exception {
-        ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home")  + "/reports", "snmp3.xml"));
-        List<Device> devices = parserXml.treeWalk();
-        ResponseEvent responseEvent = new SNMPManager().sendRequest(devices.get(1), new OID(".1.3.6.1.4.1.9.2.1.8.0"), PDU.GET);
+        List<Command> commands = ParseMib.parseCvs(new File(System.getProperty("user.home") + "/reports", "MIB.cvs"));
+        ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home")  + "/reports", "snmp.xml"));
+        List<Device> devices = parserXml.treeWalk();                                        //.1.3.6.1.2.1.1.5
+        ResponseEvent responseEvent = new SNMPManager().sendRequest(devices.get(0), new OID(commands.get(0).getOid()), PDU.GETNEXT);
         System.out.println(responseEvent.getResponse().getVariableBindings());
     }
 
