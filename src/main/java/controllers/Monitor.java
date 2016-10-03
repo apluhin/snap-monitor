@@ -10,6 +10,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
@@ -43,17 +44,22 @@ public class Monitor {
         Critirea ram = new FreeRam(monitor.commands.get(3), fun);
         Critirea cpu = new CpuLoad(monitor.commands.get(3), funCpu);
 
+        Handler handler = new Handler();
+        handler.addCriteria(monitor.getDeviceList().get(0), ram);
+        handler.addCriteria(monitor.getDeviceList().get(0), cpu);
 
         while (true) {
-            try {
-                ram.execute(monitor.deviceList.get(0));
-                cpu.execute(monitor.deviceList.get(0));
-            } catch (IOException e) {
-                logger.error("Error during send request");
-            }
-
+            handler.executeAll();
             Thread.sleep(10000);
         }
 
+    }
+
+    public List<Device> getDeviceList() {
+        return Collections.unmodifiableList(deviceList);
+    }
+
+    public List<Command> getCommands() {
+        return Collections.unmodifiableList(commands);
     }
 }

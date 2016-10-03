@@ -14,8 +14,7 @@ public class BuildTargetTest {
 
     @Test
     public void testGenerateTargetSnmpV1() throws Exception {
-        ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home") + "/reports", "snmp1.xml"));
-        List<Device> devices = parserXml.treeWalk();
+        List<Device> devices = ParserXml.treeWalk(new File(System.getProperty("user.home") + "/reports", "snmp1.xml"));
 
         BuildTarget buildTarget = new BuildTarget();
         Target generate = buildTarget.generate(devices.get(0));
@@ -27,8 +26,7 @@ public class BuildTargetTest {
 
     @Test
     public void testGenerateTargetSnmpV3() throws Exception {
-        ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home") + "/reports", "snmp.xml"));
-        List<Device> devices = parserXml.treeWalk();
+        List<Device> devices = ParserXml.treeWalk(new File(System.getProperty("user.home") + "/reports", "snmp.xml"));
         SnmpDevice snmpDevice = devices.get(0).getSnmpDevice();
         Target generate = new BuildTarget().generate(devices.get(0));
         Assert.assertEquals(generate.getSecurityLevel(), snmpDevice.getSecurityLevel());
@@ -40,8 +38,7 @@ public class BuildTargetTest {
 
     @Test
     public void testGenerateTargetSnmpV3WithoutDes() throws Exception {
-        ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home") + "/reports", "snmp.xml"));
-        List<Device> devices = parserXml.treeWalk();
+        List<Device> devices = ParserXml.treeWalk(new File(System.getProperty("user.home") + "/reports", "snmp.xml"));
         SnmpDevice snmpDevice = devices.get(1).getSnmpDevice();
         Target generate = new BuildTarget().generate(devices.get(1));
         Assert.assertEquals(generate.getSecurityLevel(), snmpDevice.getSecurityLevel());
