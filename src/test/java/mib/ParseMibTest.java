@@ -2,6 +2,7 @@ package mib;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.snmp4j.PDU;
 
 import java.io.File;
 import java.util.List;
@@ -16,6 +17,7 @@ public class ParseMibTest {
         Assert.assertEquals(command.getName(), "sysName");
         Assert.assertEquals(command.getOid(), ".1.3.6.1.2.1.1.5");
         Assert.assertEquals(commands.get(1).getName(), "upTime");
+        Assert.assertEquals(command.getTypeRequest(), PDU.GETNEXT);
 
     }
 }

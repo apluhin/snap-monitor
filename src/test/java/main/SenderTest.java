@@ -14,7 +14,7 @@ import snmp.SnmpDevice;
 import java.io.File;
 import java.util.List;
 
-public class SNMPManagerTest {
+public class SenderTest {
 
 
     @Before
@@ -32,7 +32,7 @@ public class SNMPManagerTest {
         UsmUser usmUser = user.getUsmUser();
         SnmpDevice snmpDevice = devices.get(0).getSnmpDevice();
         Assert.assertEquals(usmUser.getSecurityName().toString(), snmpDevice.getUsername());
-        Assert.assertEquals(usmUser.getAuthenticationProtocol(), snmpDevice.getTypeEncript().getMethodEncrypt());
+        Assert.assertEquals(usmUser.getPrivacyProtocol(), snmpDevice.getTypeEncript().getMethodEncrypt());
         Assert.assertEquals(usmUser.getAuthenticationPassphrase().toString(), snmpDevice.getHashPassword());
 
     }

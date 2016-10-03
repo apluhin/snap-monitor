@@ -1,5 +1,7 @@
 package mib;
 
+import org.snmp4j.PDU;
+
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -8,9 +10,9 @@ public class Command {
     private final String scope;
     private final String name;
     private final String oid;
-    private final String typeRequest;
+    private final int typeRequest;
 
-    public Command(String scope, String name, String oid, String typeRequest) {
+    public Command(String scope, String name, String oid, int typeRequest) {
         this.scope = scope;
         this.name = name;
         this.oid = oid;
@@ -18,8 +20,12 @@ public class Command {
     }
 
     public Command(List<String> collect) {
-        this(collect.get(0).trim(), collect.get(1).trim(), collect.get(2).trim(), collect.get(3).trim());
+        this(collect.get(0).trim(), collect.get(1).trim(), collect.get(2).trim(), getTypePdu(collect));
 
+    }
+
+    private static int getTypePdu(List<String> collect) {
+        return PDU.getTypeFromString((collect.get(3).trim()));
     }
 
 
@@ -40,7 +46,7 @@ public class Command {
         return oid;
     }
 
-    public String getTypeRequest() {
+    public int getTypeRequest() {
         return typeRequest;
     }
 }

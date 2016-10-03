@@ -22,7 +22,7 @@ public class BuildTarget {
         }
         target.setAddress(GenericAddress.parse("udp:" + device.getAddress().toString() + "/161"));
         target.setRetries(3);
-        target.setTimeout(500);
+        target.setTimeout(200);
         return target;
     }
 

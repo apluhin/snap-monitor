@@ -1,2 +1,4 @@
 all, sysName, .1.3.6.1.2.1.1.5, GETNEXT
 all, upTime , .1.3.6.1.2.1.1.3, GETNEXT
+cisco, cpu1Minute, .1.3.6.1.4.1.9.2.1.57.0, GET
+cisco, freeRam, .1.3.6.1.4.1.9.2.1.8.0, GET
