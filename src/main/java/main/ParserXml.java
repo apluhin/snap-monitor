@@ -12,13 +12,9 @@ import java.util.*;
 
 
 public class ParserXml {
-    private final File file;
 
-    public ParserXml(File file) {
-        this.file = file;
-    }
 
-    public List<Device> treeWalk() throws DocumentException {
+    public static List<Device> treeWalk(File file) throws DocumentException {
         SAXReader reader = new SAXReader();
         Document document = reader.read(file);
         List<Device> deviceList = new ArrayList<>();
@@ -32,7 +28,7 @@ public class ParserXml {
         return deviceList;
     }
 
-    private void treeWalk(Element element, Map<String, String> map) {
+    private static void treeWalk(Element element, Map<String, String> map) {
         for (int i = 0, size = element.nodeCount(); i < size; i++) {
             Node node = element.node(i);
             if (node instanceof Element) {

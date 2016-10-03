@@ -1,19 +1,22 @@
 package controllers;
 
+import criteria.CpuLoad;
 import criteria.Critirea;
 import criteria.FreeRam;
 import main.Device;
-import main.ParserXml;
 import mib.Command;
-import mib.ParseMib;
-import org.dom4j.DocumentException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 import java.util.function.Function;
 
 public class Monitor {
+
+    private static final Logger logger = LoggerFactory.getLogger(Monitor.class);
+
     private final List<Device> deviceList;
     private final List<Command> commands;
 
@@ -30,23 +33,27 @@ public class Monitor {
         commands.add(command);
     }
 
-    public static void main(String[] args) throws DocumentException, FileNotFoundException, InterruptedException {
-        ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home") + "/reports", "snmp.xml"));
-        File file = new File(System.getProperty("user.home") + "/reports", "MIB.cvs");
-        Monitor monitor = new Monitor(parserXml.treeWalk(), ParseMib.parseCvs(file));
+    public static void main(String[] args) throws InterruptedException {
+        File xml = new File(System.getProperty("user.home") + "/reports", "snmp.xml");
+        File cvs = new File(System.getProperty("user.home") + "/reports", "MIB.cvs");
+        Monitor monitor = Parse.parseAll(xml, cvs);
 
         Function<Long, Boolean> fun = s -> s > 1000;
-        Critirea critirea = new FreeRam(monitor.commands.get(3), fun);
+        Function<Integer, Boolean> funCpu = s -> s < 5;
+        Critirea ram = new FreeRam(monitor.commands.get(3), fun);
+        Critirea cpu = new CpuLoad(monitor.commands.get(3), funCpu);
 
 
         while (true) {
-            critirea.execute(monitor.deviceList.get(0));
+            try {
+                ram.execute(monitor.deviceList.get(0));
+                cpu.execute(monitor.deviceList.get(0));
+            } catch (IOException e) {
+                logger.error("Error during send request");
+            }
+
             Thread.sleep(10000);
         }
 
-    }
-
-    private static Function<Integer, Boolean> getFunc(int i) {
-        return s -> s < i;
     }
 }

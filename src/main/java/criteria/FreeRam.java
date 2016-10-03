@@ -21,25 +21,21 @@ public class FreeRam extends AbstractCriteria implements Critirea {
     }
 
     @Override
-    public Object execute(Device device) {
+    public Object execute(Device device) throws IOException {
         //TODO handle exception
-        Object o = null;
-        try {
-            o = checkFreeRam(device);
-        } catch (IOException e) {
-            logger.error("Error during send request");
-        }
-        return o;
+        return checkFreeRam(device);
     }
 
     private Object checkFreeRam(Device device) throws IOException {
         ResponseEvent responseEvent = sender.sendRequest(device, command.getOid(), command.getTypeRequest());
-        long i = responseEvent.getResponse().getVariableBindings().get(0).getVariable().toLong();
+        long i = (long) Util.getVariable(responseEvent);
         i = i / (1024);
         logger.info(device.getAddress() + " free space RAM " + i + "Kb");
         if(!checkRam.apply(i)) {
-            logger.error("Ram space to small");
+            logger.debug("Ram space to small");
         }
         return i;
     }
+
+
 }
