@@ -40,7 +40,7 @@ public class Device {
 
     @Override
     public String toString() {
-        return "main.Device{" +
+        return "Device{" +
                 "vendor='" + vendor + '\'' +
                 ", address='" + address + '\'' +
                 ", snmpDevice=" + snmpDevice.toString() +

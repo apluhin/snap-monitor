@@ -13,11 +13,11 @@ import java.io.IOException;
 
 public class Sender {
 
-    public ResponseEvent sendRequest(Device device, OID oid, int typePdu) throws IOException {
+    public ResponseEvent sendRequest(Device device, String oid, int typePdu) throws IOException {
         BuildQuery request = new BuildQuery(device);
         Snmp snmp = request.buildQuery();
         Target target = new BuildTarget().generate(device);
-        PDU pdu = new BuildPdu().getGeneratePdu(target.getVersion(), oid, typePdu);
+        PDU pdu = new BuildPdu().getGeneratePdu(target.getVersion(), new OID(oid), typePdu);
         return snmp.send(pdu, target);
     }
 }

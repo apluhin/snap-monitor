@@ -1,37 +1,33 @@
 package criteria;
 
 import main.Device;
-import main.Sender;
 import mib.Command;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.snmp4j.event.ResponseEvent;
-import org.snmp4j.smi.OID;
 
 import java.io.IOException;
 import java.util.function.Function;
 
-public class CpuLoad implements Critirea {
+public class CpuLoad extends AbstractCriteria implements Critirea {
 
-    private final Command command;
-    private final Sender sender;
+    private static final Logger logger = LoggerFactory.getLogger(CpuLoad.class);
+
     private final Function<Integer, Boolean> criteria;
 
     public CpuLoad(Command commandForCheckCpu, Function<Integer, Boolean> criteria) {
-        this.command = commandForCheckCpu;
+        super(commandForCheckCpu);
         this.criteria = criteria;
-        this.sender = new Sender();
     }
 
     public int checkCpuLoad(Device device) throws IOException {
-        ResponseEvent responseEvent = sender.sendRequest(device, new OID(command.getOid()), command.getTypeRequest());
+        ResponseEvent responseEvent = sender.sendRequest(device, (command.getOid()), command.getTypeRequest());
         int i = responseEvent.getResponse().getVariableBindings().get(0).getVariable().toInt();
-        if(criteria.apply(i)) {
-            //logger must be
-            System.out.println(device.getAddress() + " load cpu " + i + "%");
-            return i;
-        } else {
-            //logger
-            throw new RuntimeException("Alarm");
+        logger.debug(device.getAddress() + " load cpu " + i + "%");
+        if(!criteria.apply(i)) {
+            logger.error("CPU overload");
         }
+        return i;
     }
 
     @Override
@@ -40,7 +36,7 @@ public class CpuLoad implements Critirea {
         try {
             i = checkCpuLoad(device);
         } catch (IOException e) {
-           //TODO logger must be
+           logger.error("Error during send request");
         }
         return i;
     }

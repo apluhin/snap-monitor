@@ -8,9 +8,6 @@ import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.GenericAddress;
 import org.snmp4j.smi.OctetString;
 
-/**
- * Created by alexey on 29.09.16.
- */
 public class BuildTarget {
 
     public Target generate(Device device) {

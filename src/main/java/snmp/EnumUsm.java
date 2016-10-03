@@ -34,6 +34,8 @@ public enum  EnumUsm {
         }
     };
 
+    //TODO generate NOAUTH_NOPRIV
+
     EnumUsm(String s) {
         this.s = s;
     }

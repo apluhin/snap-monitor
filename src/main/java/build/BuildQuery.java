@@ -20,14 +20,9 @@ import java.io.IOException;
 public class BuildQuery {
     private final Device device;
 
-
-
     public BuildQuery(Device device) {
         this.device = device;
     }
-
-
-
 
     public Snmp buildQuery() throws IOException {
         TransportMapping transport = new DefaultUdpTransportMapping();
@@ -38,7 +33,6 @@ public class BuildQuery {
     }
 
     private void setUsm(Snmp snmp) {
-
         USM usm = new USM(SecurityProtocols.getInstance(),
                 new OctetString(MPv3.createLocalEngineID()), 0);
         SecurityModels.getInstance().addSecurityModel(usm);

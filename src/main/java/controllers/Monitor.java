@@ -1,7 +1,7 @@
 package controllers;
 
-import criteria.CpuLoad;
 import criteria.Critirea;
+import criteria.FreeRam;
 import main.Device;
 import main.ParserXml;
 import mib.Command;
@@ -10,7 +10,6 @@ import org.dom4j.DocumentException;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -32,18 +31,22 @@ public class Monitor {
     }
 
     public static void main(String[] args) throws DocumentException, FileNotFoundException, InterruptedException {
-        List<Critirea> critireas = new ArrayList<>();
         ParserXml parserXml = new ParserXml(new File(System.getProperty("user.home") + "/reports", "snmp.xml"));
         File file = new File(System.getProperty("user.home") + "/reports", "MIB.cvs");
-        List<Command> commands = ParseMib.parseCvs(file);
-        List<Device> devices = parserXml.treeWalk();
-        Function<Integer, Boolean> function = getFunc(3);
-        CpuLoad cpuLoad = new CpuLoad(commands.get(2), function);
-        critireas.add(cpuLoad);
+        Monitor monitor = new Monitor(parserXml.treeWalk(), ParseMib.parseCvs(file));
+
+        Function<Long, Boolean> fun = s -> s > 1000;
+        Critirea critirea = new FreeRam(monitor.commands.get(3), fun);
+
+
+        while (true) {
+            critirea.execute(monitor.deviceList.get(0));
+            Thread.sleep(10000);
+        }
 
     }
 
-    private static Function<Integer,Boolean> getFunc(int i) {
+    private static Function<Integer, Boolean> getFunc(int i) {
         return s -> s < i;
     }
 }
