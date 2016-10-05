@@ -9,7 +9,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
@@ -42,15 +41,17 @@ public class Monitor {
         Function<Long, Boolean> fun = s -> s > 1000;
         Function<Integer, Boolean> funCpu = s -> s < 5;
         Critirea ram = new FreeRam(monitor.commands.get(3), fun);
-        Critirea cpu = new CpuLoad(monitor.commands.get(3), funCpu);
+        Critirea cpu = new CpuLoad(monitor.commands.get(2), funCpu);
 
         Handler handler = new Handler();
         handler.addCriteria(monitor.getDeviceList().get(0), ram);
         handler.addCriteria(monitor.getDeviceList().get(0), cpu);
 
+
+
+
         while (true) {
             handler.executeAll();
-            Thread.sleep(10000);
         }
 
     }

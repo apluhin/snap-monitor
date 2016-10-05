@@ -22,8 +22,8 @@ public class CpuLoad extends AbstractCriteria implements Critirea {
 
     public int checkCpuLoad(Device device) throws IOException {
         ResponseEvent responseEvent = sender.sendRequest(device, (command.getOid()), command.getTypeRequest());
-        int i = (int) Util.getVariable(responseEvent);
-        logger.debug(device.getAddress() + " load cpu " + i + "%");
+        int i = (int) Util.getVariable(responseEvent).toInt();
+        logger.info(device.getAddress() + " load cpu " + i + "%");
         if(!criteria.apply(i)) {
             logger.debug("CPU overload");
         }
