@@ -25,6 +25,8 @@ public enum Value {
             community.setDisable(true);
             username.setDisable(false);
         }
+
+
     };
 
     private static void stateForOldVersion(ChoiceBox<String> typeEncrypt, ChoiceBox<String> typeHash, TextField password, TextField encryptPassword, TextField community, TextField username) {
@@ -39,4 +41,5 @@ public enum Value {
     public abstract void setVisible(ChoiceBox<String> typeEncrypt,
                                     ChoiceBox<String> typeHash,
                                     TextField password, TextField encryptPassword, TextField community, TextField username);
+
 }

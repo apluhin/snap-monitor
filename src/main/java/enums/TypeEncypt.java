@@ -11,5 +11,6 @@ public enum  TypeEncypt {
         }
     };
 
+
     public abstract OID getMethodEncrypt();
 }

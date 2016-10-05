@@ -26,9 +26,9 @@
                             <items>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                     <children>
-                                        <TableView prefHeight="559.0" prefWidth="250.0">
+                                        <TableView fx:id="deviceTableView" prefHeight="559.0" prefWidth="250.0">
                                             <columns>
-                                                <TableColumn prefWidth="249.0" text="Devices"/>
+                                                <TableColumn fx:id="nameColumn" prefWidth="249.0" text="Devices"/>
                                             </columns>
                                         </TableView>
                                     </children>
@@ -103,7 +103,7 @@
                                             </children>
                                         </GridPane>
                                         <Button layoutX="472.0" layoutY="493.0" mnemonicParsing="false" prefWidth="70.0"
-                                                text="Add"/>
+                                                text="Add" onAction="#addDevice"/>
                                     </children>
                                 </AnchorPane>
                             </items>
