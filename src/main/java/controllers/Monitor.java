@@ -1,66 +1,51 @@
 package controllers;
 
-import criteria.CpuLoad;
-import criteria.Critirea;
-import criteria.FreeRam;
+import criteria.Task;
 import main.Device;
-import mib.Command;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+
 
 public class Monitor {
 
     private static final Logger logger = LoggerFactory.getLogger(Monitor.class);
 
-    private final List<Device> deviceList;
-    private final List<Command> commands;
+    private final Map<Device, List<Task>> mapOfDevice;
 
-    public Monitor(List<Device> deviceList, List<Command> commands) {
-        this.deviceList = deviceList;
-        this.commands = commands;
+    private Handler handler;
+
+    public Monitor(Map<Device, List<Task>> tasks) {
+        this.mapOfDevice = tasks;
+        handler = new Handler(tasks);
     }
 
-    public void addDevice(Device device) {
-        deviceList.add(device);
+    public Monitor() {
+        mapOfDevice = new ConcurrentHashMap<>();
+        handler = new Handler(mapOfDevice);
     }
 
-    public void addCommand(Command command) {
-        commands.add(command);
+    public void addDeviceOnExecute(Device device, Task task) {
+        mapOfDevice.putIfAbsent(device, new CopyOnWriteArrayList<>());
+        mapOfDevice.get(device).add(task);
     }
 
-    public static void main(String[] args) throws InterruptedException {
-        File xml = new File(System.getProperty("user.home") + "/reports", "snmp.xml");
-        File cvs = new File(System.getProperty("user.home") + "/reports", "MIB.cvs");
-        Monitor monitor = Parse.parseAll(xml, cvs);
-
-        Function<Long, Boolean> fun = s -> s > 1000;
-        Function<Integer, Boolean> funCpu = s -> s < 5;
-        Critirea ram = new FreeRam(monitor.commands.get(3), fun);
-        Critirea cpu = new CpuLoad(monitor.commands.get(2), funCpu);
-
-        Handler handler = new Handler();
-        handler.addCriteria(monitor.getDeviceList().get(0), ram);
-        handler.addCriteria(monitor.getDeviceList().get(0), cpu);
-
-
-
-
-        while (true) {
-            handler.executeAll();
-        }
-
+    public void beginExecute() {
+        new Thread(() -> {
+            while (true) {
+                handler.runTasks();
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
-    public List<Device> getDeviceList() {
-        return Collections.unmodifiableList(deviceList);
-    }
 
-    public List<Command> getCommands() {
-        return Collections.unmodifiableList(commands);
-    }
 }

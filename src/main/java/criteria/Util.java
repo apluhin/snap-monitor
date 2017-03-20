@@ -9,11 +9,10 @@ public class Util {
 
     private static final Logger logger = LoggerFactory.getLogger(Util.class);
 
-    public static Variable getVariable (ResponseEvent responseEvent) {
-        try {
-            return responseEvent.getResponse().getVariableBindings().get(0).getVariable();
-        } catch (NullPointerException e) {
-            throw new RuntimeException("Can't find device");
-        }
+    public static Variable getVariable(ResponseEvent responseEvent) {
+
+        return responseEvent.getResponse().getVariableBindings().get(0).getVariable();
+
+
     }
 }

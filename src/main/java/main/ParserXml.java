@@ -1,5 +1,7 @@
 package main;
 
+import criteria.Task;
+import enums.Vendor;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
@@ -22,7 +24,8 @@ public class ParserXml {
         while (i.hasNext()) {
             Map<String, String> map = new HashMap<>();
             treeWalk(((Element) i.next()), map);
-            deviceList.add(new Device(map.get("vendor"), map.get("addres"), map.get("name"), new SnmpDevice(map)));
+            Task tesrConnect = Vendor.valueOf(map.get("vendor").toUpperCase()).getTestTask();
+            deviceList.add(new Device(map.get("vendor"), map.get("addres"), map.get("name"), new SnmpDevice(map), tesrConnect));
 
         }
         return deviceList;

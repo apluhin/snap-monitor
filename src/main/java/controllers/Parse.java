@@ -16,16 +16,28 @@ public class Parse {
 
     private static final Logger logger = LoggerFactory.getLogger(Parse.class);
 
-    public static Monitor parseAll(File xml, File cvs) {
-        Monitor monitor;
+    public static List<Command> getCommands(File cvs) {
+        List<Command> commands;
         try {
-            List<Command> commands = ParseMib.parseCvs(cvs);
-            List<Device> devices = ParserXml.treeWalk(xml);
-            monitor = new Monitor(devices, commands);
-        } catch (IOException | DocumentException e) {
+            commands = ParseMib.parseCvs(cvs);
+
+        } catch (IOException e) {
             throw new RuntimeException("Error during parse", e.getCause());
         }
-        return monitor;
+        return commands;
+    }
+
+
+    public static List<Device> getDevice(File xml) {
+        List<Device> devices;
+        try {
+
+            devices = ParserXml.treeWalk(xml);
+
+        } catch (DocumentException e) {
+            throw new RuntimeException("Error during parse", e.getCause());
+        }
+        return devices;
     }
 
 }

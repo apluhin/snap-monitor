@@ -7,23 +7,26 @@ import org.slf4j.LoggerFactory;
 import org.snmp4j.event.ResponseEvent;
 
 import java.io.IOException;
-import java.util.function.Function;
 
-public class FreeRam extends AbstractCriteria implements Critirea {
+public class FreeRam extends AbstractTask {
 
     private static final Logger logger = LoggerFactory.getLogger(FreeRam.class);
 
-    private final Function<Long, Boolean> checkRam;
 
-    public FreeRam(Command command, Function<Long, Boolean> checkRam) {
+
+    public FreeRam(Command command) {
         super(command);
-        this.checkRam = checkRam;
+
     }
 
     @Override
-    public Object execute(Device device) throws IOException {
+    public Object execute(Device device)  {
         //TODO handle exception
-        return checkFreeRam(device);
+        try {
+            return checkFreeRam(device);
+        } catch (IOException e) {
+            throw new RuntimeException("Current error", e);
+        }
     }
 
     private Object checkFreeRam(Device device) throws IOException {
@@ -31,9 +34,6 @@ public class FreeRam extends AbstractCriteria implements Critirea {
         long i =  Util.getVariable(responseEvent).toLong();
         i = i / (1024);
         logger.info(device.getAddress() + " free space RAM " + i + "Kb");
-        if(!checkRam.apply(i)) {
-            logger.debug("Ram space to small");
-        }
         return i;
     }
 

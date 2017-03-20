@@ -9,7 +9,6 @@ import org.snmp4j.security.SecurityModels;
 import org.snmp4j.security.SecurityProtocols;
 import org.snmp4j.security.USM;
 import org.snmp4j.smi.OctetString;
-import org.snmp4j.transport.DefaultUdpTransportMapping;
 import snmp.GenerateUsmUser;
 
 import java.io.IOException;
@@ -24,11 +23,13 @@ public class BuildQuery {
         this.device = device;
     }
 
-    public Snmp buildQuery() throws IOException {
-        TransportMapping transport = new DefaultUdpTransportMapping();
-        Snmp snmp = new Snmp(transport);
+    public Snmp buildQuery(Snmp snmp, TransportMapping transport) throws IOException {
+
+
         if(device.getSnmpDevice().getVersion() == SnmpConstants.version3) {setUsm(snmp);}
-        transport.listen();
+        if(!transport.isListening()) {
+            transport.listen();
+        }
         return snmp;
     }
 
@@ -36,6 +37,7 @@ public class BuildQuery {
         USM usm = new USM(SecurityProtocols.getInstance(),
                 new OctetString(MPv3.createLocalEngineID()), 0);
         SecurityModels.getInstance().addSecurityModel(usm);
+
         snmp.getUSM().addUser(new GenerateUsmUser(device.getSnmpDevice()).generateUsmUser());
 
     }

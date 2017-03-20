@@ -1,5 +1,6 @@
 package main;
 
+import criteria.Task;
 import snmp.SnmpDevice;
 
 import java.net.InetAddress;
@@ -11,12 +12,14 @@ public class Device {
     private final String vendor;
     private final InetAddress address;
     private final SnmpDevice snmpDevice;
+    private final Task testConnect;
 
-    public Device(String vendor, String address, String name, SnmpDevice snmpDevice) {
+    public Device(String vendor, String address, String name, SnmpDevice snmpDevice, Task testConnect) {
         this.vendor = vendor;
         this.address = getAddress(address);
         this.name = name;
         this.snmpDevice = snmpDevice;
+        this.testConnect = testConnect;
     }
 
     private InetAddress getAddress(String address)  {
@@ -52,6 +55,10 @@ public class Device {
                 ", address=" + address +
                 ", snmpDevice=" + snmpDevice.toString() +
                 '}';
+    }
+
+    public Task getTestConnect() {
+        return testConnect;
     }
 
     @Override

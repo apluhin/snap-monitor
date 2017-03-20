@@ -1,22 +1,22 @@
 package controllers;
 
-import criteria.Critirea;
+import criteria.Task;
 
 /**
  * Created by alexey on 03.10.16.
  */
 public class Result {
 
-    private final Critirea critirea;
+    private final Task task;
     private final Object result;
 
-    public Result(Critirea s, Object result) {
+    public Result(Task s, Object result) {
         this.result = result;
-        this.critirea = s;
+        this.task = s;
     }
 
-    public Critirea getCritirea() {
-        return critirea;
+    public Task getTask() {
+        return task;
     }
 
     public Object getResult() {
