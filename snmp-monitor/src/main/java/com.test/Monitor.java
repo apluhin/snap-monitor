@@ -1,5 +1,6 @@
-package com.test.controllers;
+package com.test;
 
+import com.test.controllers.Handler;
 import com.test.criteria.Task;
 import com.test.entity.Device;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,5 @@
 package com.test;
 
-import com.test.controllers.Monitor;
 import com.test.controllers.Parse;
 import com.test.entity.Device;
 import com.test.entity.DeviceEntity;
