@@ -32,7 +32,9 @@ public class SnmpV3 implements VersionSnmp {
     }
 
     private TypeEncypt getTypeEncript(Map<String, String> type) {
-        if(type.get("typeEncript") == null) return null;
+        if(type.get("typeEncript") == null) {
+            return null;
+        }
         return TypeEncypt.valueOf(type.get("typeEncript"));
     }
 
