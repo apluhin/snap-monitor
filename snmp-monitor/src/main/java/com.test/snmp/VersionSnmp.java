@@ -1,6 +1,6 @@
 package com.test.snmp;
 
-import com.test.enums.TypeEncypt;
+import com.test.enums.TypeEncrypt;
 import com.test.enums.TypeHash;
 
 public interface VersionSnmp {
@@ -12,7 +12,7 @@ public interface VersionSnmp {
 
     TypeHash typeHash();
 
-    TypeEncypt typeEncript();
+    TypeEncrypt typeEncrypt();
 
     String getCommunity();
 

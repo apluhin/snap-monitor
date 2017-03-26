@@ -3,7 +3,7 @@ package com.test.enums;
 import org.snmp4j.security.PrivDES;
 import org.snmp4j.smi.OID;
 
-public enum  TypeEncypt {
+public enum TypeEncrypt {
     DES {
         @Override
         public OID getMethodEncrypt() {

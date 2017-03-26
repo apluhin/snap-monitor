@@ -18,7 +18,6 @@ public class CpuLoad extends AbstractTask {
     public int checkCpuLoad(Device device) throws IOException {
         ResponseEvent responseEvent = sender.sendRequest(device, (command.getOid()), command.getTypeRequest());
         int i = (int) Util.getVariable(responseEvent).toInt();
-        System.out.println(device.getAddress() + " load cpu " + i + "%");
         return i;
     }
 

@@ -1,8 +1,8 @@
 package com.test.snmp;
 
-import com.test.enums.TypeV;
-import com.test.enums.TypeEncypt;
+import com.test.enums.TypeEncrypt;
 import com.test.enums.TypeHash;
+import com.test.enums.TypeV;
 
 import java.util.Map;
 
@@ -31,8 +31,8 @@ public class SnmpDevice {
         return versionSnmp.typeHash();
     }
 
-    public TypeEncypt getTypeEncript() {
-        return versionSnmp.typeEncript();
+    public TypeEncrypt getTypeEncript() {
+        return versionSnmp.typeEncrypt();
     }
 
     public String getCommunity() {

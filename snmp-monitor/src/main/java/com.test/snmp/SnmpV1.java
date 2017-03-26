@@ -1,6 +1,6 @@
 package com.test.snmp;
 
-import com.test.enums.TypeEncypt;
+import com.test.enums.TypeEncrypt;
 import com.test.enums.TypeHash;
 import org.snmp4j.mp.SnmpConstants;
 
@@ -11,8 +11,8 @@ import java.util.Map;
  */
 public class SnmpV1 implements VersionSnmp {
 
-    private final String community;
     private final static int version = SnmpConstants.version1;
+    private final String community;
 
     public SnmpV1(Map<String, String> type) {
         community = type.get("community");
@@ -36,7 +36,7 @@ public class SnmpV1 implements VersionSnmp {
         throw new UnsupportedOperationException("This version of com.test.snmp doest support");    }
 
     @Override
-    public TypeEncypt typeEncript() {
+    public TypeEncrypt typeEncrypt() {
         throw new UnsupportedOperationException("This version of com.test.snmp doest support");    }
 
     @Override

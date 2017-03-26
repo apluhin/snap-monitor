@@ -3,6 +3,7 @@ package com.test;
 import com.test.controllers.Handler;
 import com.test.criteria.Task;
 import com.test.entity.Device;
+import com.test.enums.Vendor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
@@ -39,7 +40,7 @@ public class Monitor {
             while (true) {
                 handler.runTasks();
                 try {
-                    Thread.sleep(1000);
+                    Thread.sleep(5000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -55,5 +56,13 @@ public class Monitor {
 
     public List<Device> getListDevices() {
         return mapOfDevice.keySet().stream().collect(Collectors.toList());
+    }
+
+    public void addDeviceOnExecute(Device device) {
+        if (mapOfDevice.containsKey(device)) {
+            return;
+        }
+        mapOfDevice.putIfAbsent(device, new CopyOnWriteArrayList<>());
+        mapOfDevice.get(device).add(Vendor.valueOf(device.getVendor()).getCpu1MinuteTask());
     }
 }

@@ -2,7 +2,6 @@ package com.test;
 
 import com.test.controllers.Parse;
 import com.test.entity.Device;
-import com.test.enums.Vendor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -36,7 +35,7 @@ public class Application {
         monitor.beginExecute();
         File xml = new File(System.getProperty("user.home") + "/reports", "snmp.xml");
         List<Device> device = Parse.getDevice(xml);
-        monitor.addDeviceOnExecute(device.get(0), (Vendor.valueOf(device.get(0).getVendor().toUpperCase()).getCpu1MinuteTask()));
-        monitor.addDeviceOnExecute(device.get(0), (Vendor.valueOf(device.get(0).getVendor().toUpperCase()).getTestTask()));
+        //      monitor.addDeviceOnExecute(device.get(0), (Vendor.valueOf(device.get(0).getVendor().toUpperCase()).getCpu1MinuteTask()));
+        //      monitor.addDeviceOnExecute(device.get(0), (Vendor.valueOf(device.get(0).getVendor().toUpperCase()).getTestTask()));
     }
 }

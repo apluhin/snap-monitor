@@ -7,6 +7,7 @@ import com.test.entity.DeviceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Service
@@ -21,7 +22,7 @@ public enum TypeRepository {
 
         @Override
         public void saveResult(Object execute, Device key) {
-            FactoryRepository.getCpuRepository().save(new CpuEntity(key.getAddress().toString(), LocalDateTime.now(), (Integer) execute));
+            FactoryRepository.getCpuRepository().save(new CpuEntity(key.getAddress().toString(), Timestamp.valueOf(LocalDateTime.now()), (Integer) execute));
         }
     },
     RamFree {

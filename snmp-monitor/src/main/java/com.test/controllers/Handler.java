@@ -46,7 +46,6 @@ public class Handler {
         try {
             Object execute = Vendor.valueOf(device.getVendor().toUpperCase()).getTestTask().execute(device);
             device.setName(execute.toString());
-            System.out.println(execute);
             mapStatus.put(device, true);
         } catch (NullPointerException | ClassCastException e) {
             if (mapStatus.get(device) == null) {

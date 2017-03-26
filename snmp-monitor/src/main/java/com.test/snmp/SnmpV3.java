@@ -1,6 +1,6 @@
 package com.test.snmp;
 
-import com.test.enums.TypeEncypt;
+import com.test.enums.TypeEncrypt;
 import com.test.enums.TypeHash;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.security.SecurityLevel;
@@ -20,7 +20,7 @@ public class SnmpV3 implements VersionSnmp {
     private final int securityLevel;
 
     private final TypeHash typeHash;
-    private final TypeEncypt typeEncypt;
+    private final TypeEncrypt typeEncypt;
 
     public SnmpV3(Map<String, String> type) {
         hashPassword = type.get("hashPassword");
@@ -31,11 +31,11 @@ public class SnmpV3 implements VersionSnmp {
         typeEncypt = getTypeEncript(type);
     }
 
-    private TypeEncypt getTypeEncript(Map<String, String> type) {
-        if(type.get("typeEncript") == null) {
+    private TypeEncrypt getTypeEncript(Map<String, String> type) {
+        if (type.get("typeEncrypt") == null) {
             return null;
         }
-        return TypeEncypt.valueOf(type.get("typeEncript"));
+        return TypeEncrypt.valueOf(type.get("typeEncrypt"));
     }
 
     private TypeHash getTypeHash(Map<String, String> type) {
@@ -64,7 +64,7 @@ public class SnmpV3 implements VersionSnmp {
     }
 
     @Override
-    public TypeEncypt typeEncript() {
+    public TypeEncrypt typeEncrypt() {
         return typeEncypt;
     }
 

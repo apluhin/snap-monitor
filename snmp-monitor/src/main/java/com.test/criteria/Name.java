@@ -19,8 +19,6 @@ public class Name extends AbstractTask {
         ResponseEvent responseEvent;
         try {
             responseEvent = sender.sendRequest(device, command.getOid(), command.getTypeRequest());
-            String load = Util.getVariable(responseEvent).toString();
-            System.out.println(device.getAddress() + " name " + load);
             return Util.getVariable(responseEvent).toString();
         } catch (IOException e) {
             throw new NullPointerException("need handle");

@@ -45,7 +45,6 @@ public class FactoryRepository {
 
         @PostConstruct
         public void setRepository() {
-            System.out.println("_==============================");
             Field[] fields = this.getClass().getDeclaredFields();
             for (int i = 0; i < fields.length; i++) {
                 try {
