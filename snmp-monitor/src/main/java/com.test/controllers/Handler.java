@@ -1,15 +1,13 @@
 package com.test.controllers;
 
 import com.test.criteria.Task;
-import com.test.entity.CpuEntity;
 import com.test.entity.Device;
+import com.test.enums.TypeRepository;
+import com.test.enums.Vendor;
 import com.test.mib.Command;
-import com.test.repository.CpuRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -21,12 +19,11 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Controller
 public class Handler {
 
-    @Autowired
-    CpuRepository cpuRepository;
 
-    private  Map<Device, List<Task>> deviceListMap;
     Map<Device, List<Result>> map;
     Map<Device, List<Command>> tasks;
+    private Map<Device, List<Task>> deviceListMap;
+    private Map<Device, Boolean> mapStatus = new ConcurrentHashMap<>();
 
 
     public Handler(Map<Device, List<Task>> deviceListMap) {
@@ -47,9 +44,14 @@ public class Handler {
 
     private boolean isConnected(Device device) {
         try {
-            Object execute = device.getTestConnect().execute(device);
+            Object execute = Vendor.valueOf(device.getVendor().toUpperCase()).getTestTask().execute(device);
+            device.setName(execute.toString());
             System.out.println(execute);
+            mapStatus.put(device, true);
         } catch (NullPointerException | ClassCastException e) {
+            if (mapStatus.get(device) == null) {
+                deviceListMap.remove(device);
+            }
             System.out.println("Can't find");
             return false;
         }
@@ -59,14 +61,16 @@ public class Handler {
     public Map<Device, List<Result>> runTasks() {
         map = new ConcurrentHashMap<>();
         for (Map.Entry<Device, List<Task>> deviceListEntry : deviceListMap.entrySet()) {
+            isConnected(deviceListEntry.getKey());
+            if (mapStatus.get(deviceListEntry.getKey()) == null) {
+                break;
+            }
             List<Task> value = deviceListEntry.getValue();
             Device key = deviceListEntry.getKey();
             value.forEach(s -> {
                 try {
                     Object execute = execute(key, s);
-                    if(s.getName().equalsIgnoreCase("cpuload")) {
-                        cpuRepository.save(new CpuEntity(key.getAddress().toString(), LocalDateTime.now(), (Integer) execute));
-                    }
+                    TypeRepository.valueOf(s.getName()).saveResult(execute, key);
                     putIn(key, s, execute);
                 } catch (IOException | NullPointerException e) {
                     System.out.println("Can't connect to, device now isn't unreacheble " + key.getAddress());

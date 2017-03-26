@@ -1,6 +1,5 @@
 package com.test.entity;
 
-import com.test.criteria.Task;
 import com.test.snmp.SnmpDevice;
 
 import java.net.InetAddress;
@@ -8,18 +7,17 @@ import java.net.UnknownHostException;
 
 public class Device {
 
-    private final String name;
     private final String vendor;
     private final InetAddress address;
     private final SnmpDevice snmpDevice;
-    private final Task testConnect;
+    private String name;
 
-    public Device(String vendor, String address, String name, SnmpDevice snmpDevice, Task testConnect) {
+
+    public Device(String vendor, String address, String name, SnmpDevice snmpDevice) {
         this.vendor = vendor;
         this.address = getAddress(address);
         this.name = name;
         this.snmpDevice = snmpDevice;
-        this.testConnect = testConnect;
     }
 
     private InetAddress getAddress(String address)  {
@@ -47,6 +45,10 @@ public class Device {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     @Override
     public String toString() {
         return "DeviceEntity{" +
@@ -57,9 +59,6 @@ public class Device {
                 '}';
     }
 
-    public Task getTestConnect() {
-        return testConnect;
-    }
 
     @Override
     public boolean equals(Object o) {

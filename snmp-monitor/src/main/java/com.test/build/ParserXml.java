@@ -1,14 +1,12 @@
 package com.test.build;
 
-import com.test.criteria.Task;
 import com.test.entity.Device;
-import com.test.enums.Vendor;
+import com.test.snmp.SnmpDevice;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.Node;
 import org.dom4j.io.SAXReader;
-import com.test.snmp.SnmpDevice;
 
 import java.io.File;
 import java.util.*;
@@ -25,8 +23,7 @@ public class ParserXml {
         while (i.hasNext()) {
             Map<String, String> map = new HashMap<>();
             treeWalk(((Element) i.next()), map);
-            Task tesrConnect = Vendor.valueOf(map.get("vendor").toUpperCase()).getTestTask();
-            deviceList.add(new Device(map.get("vendor"), map.get("addres"), map.get("name"), new SnmpDevice(map), tesrConnect));
+            deviceList.add(new Device(map.get("vendor"), map.get("addres"), map.get("name"), new SnmpDevice(map)));
 
         }
         return deviceList;

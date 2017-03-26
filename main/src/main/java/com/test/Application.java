@@ -37,5 +37,6 @@ public class Application {
         File xml = new File(System.getProperty("user.home") + "/reports", "snmp.xml");
         List<Device> device = Parse.getDevice(xml);
         monitor.addDeviceOnExecute(device.get(0), (Vendor.valueOf(device.get(0).getVendor().toUpperCase()).getCpu1MinuteTask()));
+        monitor.addDeviceOnExecute(device.get(0), (Vendor.valueOf(device.get(0).getVendor().toUpperCase()).getTestTask()));
     }
 }

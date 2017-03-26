@@ -9,15 +9,15 @@ import org.springframework.stereotype.Controller;
 import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
 
 @Controller
 public class Monitor {
 
 
-
-
-    private  Map<Device, List<Task>> mapOfDevice;
+    private Map<Device, List<Task>> mapOfDevice = new ConcurrentHashMap<>();
     @Autowired
     private Handler handler;
 
@@ -53,4 +53,7 @@ public class Monitor {
     }
 
 
+    public List<Device> getListDevices() {
+        return mapOfDevice.keySet().stream().collect(Collectors.toList());
+    }
 }

@@ -10,7 +10,7 @@ public enum Vendor {
     CISCO {
         @Override
         public Task getTestTask() {
-            Command command = new Command("cisco", "sysName", ".1.3.6.1.2.1.1.5", PDU.getTypeFromString("GETNEXT"));
+            Command command = new Command("cisco", "Device", ".1.3.6.1.2.1.1.5", PDU.getTypeFromString("GETNEXT"));
             return new Name(command);
         }
 
