@@ -3,6 +3,7 @@ package com.test.controller;
 
 import com.test.dto.DeviceDto;
 import com.test.entity.CpuEntity;
+import com.test.entity.RamEntity;
 import com.test.service.DeviceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -42,6 +43,14 @@ public class DeviceController {
     public List<CpuEntity> getCpuMonitoring(String address) {
         return deviceService.getCpuMonitoring(address);
     }
+
+    @RequestMapping(params = "action=ram", method = RequestMethod.GET)
+    @ResponseBody
+    public List<RamEntity> getRamMonitoring(String address) {
+        return deviceService.getRamMonitoring(address);
+    }
+
+
 
 
 }

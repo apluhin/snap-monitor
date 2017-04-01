@@ -6,10 +6,10 @@ import org.snmp4j.event.ResponseEvent;
 
 import java.io.IOException;
 
-public class FreeRam extends AbstractTask {
+public class FreeMem extends AbstractTask {
 
 
-    public FreeRam(Command command) {
+    public FreeMem(Command command) {
         super(command);
 
     }
@@ -26,14 +26,13 @@ public class FreeRam extends AbstractTask {
 
     @Override
     public String getName() {
-        return "FreeRam";
+        return "FreeMem";
     }
 
     private Object checkFreeRam(Device device) throws IOException {
         ResponseEvent responseEvent = sender.sendRequest(device, command.getOid(), command.getTypeRequest());
         long i =  Util.getVariable(responseEvent).toLong();
         i = i / (1024);
-        System.out.println(device.getAddress() + " free space RAM " + i + "Kb");
         return i;
     }
 

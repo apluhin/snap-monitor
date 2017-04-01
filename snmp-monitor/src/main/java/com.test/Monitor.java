@@ -40,13 +40,26 @@ public class Monitor {
             while (true) {
                 handler.runTasks();
                 try {
-                    Thread.sleep(5000);
+                    Thread.sleep(15000);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
             }
         }).start();
     }
+
+    public void addLoad() {
+        Device next = mapOfDevice.keySet().iterator().next();
+        new Thread(() -> {
+            while (true) {
+                Vendor.valueOf(next.getVendor().toUpperCase()).getTestTask().execute(next);
+            }
+        }).start();
+    }
+
+
+
+
 
     @PostConstruct
     public void cont() {
@@ -64,5 +77,6 @@ public class Monitor {
         }
         mapOfDevice.putIfAbsent(device, new CopyOnWriteArrayList<>());
         mapOfDevice.get(device).add(Vendor.valueOf(device.getVendor()).getCpu1MinuteTask());
+        mapOfDevice.get(device).add(Vendor.valueOf(device.getVendor()).getFreeMemory());
     }
 }

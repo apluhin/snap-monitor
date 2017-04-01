@@ -23,7 +23,7 @@ public class ParserXml {
         while (i.hasNext()) {
             Map<String, String> map = new HashMap<>();
             treeWalk(((Element) i.next()), map);
-            deviceList.add(new Device(map.get("vendor"), map.get("addres"), map.get("name"), new SnmpDevice(map)));
+            deviceList.add(new Device(map.get("vendor").toUpperCase(), map.get("addres"), map.get("name"), new SnmpDevice(map)));
 
         }
         return deviceList;

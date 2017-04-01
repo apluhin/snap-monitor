@@ -4,8 +4,11 @@ import com.test.Monitor;
 import com.test.dto.DeviceDto;
 import com.test.entity.CpuEntity;
 import com.test.entity.Device;
+import com.test.entity.DeviceEntity;
+import com.test.entity.RamEntity;
 import com.test.enums.TypeRepository;
 import com.test.repository.CpuRepository;
+import com.test.repository.RamRepository;
 import com.test.snmp.SnmpDevice;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,10 +56,20 @@ public class DeviceService {
         return "Устройство добавлено";
     }
 
+    public List<DeviceEntity> transform(List<Device> list) {
+        return list.stream().
+                map(device -> new DeviceEntity(device.getName(), device.getVendor(), device.getAddress().toString())).
+                collect(Collectors.toList());
+    }
+
     public List<CpuEntity> getCpuMonitoring(String address) {
-        List all = TypeRepository.CpuLoad.getRepository().findAll();
-        System.out.println(all);
         List<CpuEntity> byAddress = ((CpuRepository) (TypeRepository.CpuLoad.getRepository())).findByAddress("/" + address);
         return byAddress;
     }
+
+    public List<RamEntity> getRamMonitoring(String address) {
+        List<RamEntity> byAddress = ((RamRepository) (TypeRepository.FreeMem.getRepository())).findByAddress("/" + address);
+        return byAddress;
+    }
+
 }

@@ -67,7 +67,6 @@ public class Device {
 
         Device device = (Device) o;
 
-        if (name != null ? !name.equals(device.name) : device.name != null) return false;
         if (vendor != null ? !vendor.equals(device.vendor) : device.vendor != null) return false;
         if (address != null ? !address.equals(device.address) : device.address != null) return false;
         return snmpDevice != null ? snmpDevice.equals(device.snmpDevice) : device.snmpDevice == null;
@@ -76,12 +75,9 @@ public class Device {
 
     @Override
     public int hashCode() {
-        int result = name != null ? name.hashCode() : 0;
-        result = 31 * result + (vendor != null ? vendor.hashCode() : 0);
+        int result = vendor != null ? vendor.hashCode() : 0;
         result = 31 * result + (address != null ? address.hashCode() : 0);
         result = 31 * result + (snmpDevice != null ? snmpDevice.hashCode() : 0);
         return result;
     }
-
-
 }

@@ -14,7 +14,7 @@ public enum  EnumUsm {
                     new OctetString(snmpDevice.getUsername()),
                     snmpDevice.getTypeHash().getMethodHash(),
                     new OctetString(snmpDevice.getHashPassword()),
-                    snmpDevice.getTypeEncript().getMethodEncrypt(),
+                    snmpDevice.getTypeEncrypt().getMethodEncrypt(),
                     new OctetString(snmpDevice.getEncryptionPassword())
             );
             return usmUser;
@@ -36,6 +36,8 @@ public enum  EnumUsm {
 
     //TODO generate NOAUTH_NOPRIV
 
+    private final String s;
+
     EnumUsm(String s) {
         this.s = s;
     }
@@ -50,6 +52,4 @@ public enum  EnumUsm {
     }
 
     public abstract UsmUser genetateUsm(SnmpDevice snmpDevice);
-
-    private final String s;
 }

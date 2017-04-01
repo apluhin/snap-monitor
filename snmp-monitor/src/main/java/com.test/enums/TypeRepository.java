@@ -4,6 +4,7 @@ import com.test.controllers.FactoryRepository;
 import com.test.entity.CpuEntity;
 import com.test.entity.Device;
 import com.test.entity.DeviceEntity;
+import com.test.entity.RamEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public enum TypeRepository {
             FactoryRepository.getCpuRepository().save(new CpuEntity(key.getAddress().toString(), Timestamp.valueOf(LocalDateTime.now()), (Integer) execute));
         }
     },
-    RamFree {
+    FreeMem {
         @Override
         public JpaRepository getRepository() {
             return FactoryRepository.getRamRepository();
@@ -33,7 +34,7 @@ public enum TypeRepository {
 
         @Override
         public void saveResult(Object execute, Device key) {
-
+            FactoryRepository.getRamRepository().save(new RamEntity(key.getAddress().toString(), (Long) execute, Timestamp.valueOf(LocalDateTime.now())));
         }
     },
     sysName {

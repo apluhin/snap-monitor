@@ -31,7 +31,7 @@ public class SnmpDevice {
         return versionSnmp.typeHash();
     }
 
-    public TypeEncrypt getTypeEncript() {
+    public TypeEncrypt getTypeEncrypt() {
         return versionSnmp.typeEncrypt();
     }
 
@@ -52,5 +52,21 @@ public class SnmpDevice {
         return "SnmpDevice{" +
                 "com.test.snmp=" + versionSnmp.toString() +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SnmpDevice that = (SnmpDevice) o;
+
+        return versionSnmp != null ? versionSnmp.equals(that.versionSnmp) : that.versionSnmp == null;
+
+    }
+
+    @Override
+    public int hashCode() {
+        return versionSnmp != null ? versionSnmp.hashCode() : 0;
     }
 }
