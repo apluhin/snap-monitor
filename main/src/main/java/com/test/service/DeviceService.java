@@ -38,6 +38,7 @@ public class DeviceService {
     }
 
     public String addDevice(String mapOfJson) {
+        System.out.println(mapOfJson);
         JSONObject object = new JSONObject(mapOfJson);
         object = object.getJSONObject("device");
         Map<String, String> map = new HashMap<>();
@@ -64,6 +65,15 @@ public class DeviceService {
 
     public List<CpuEntity> getCpuMonitoring(String address) {
         List<CpuEntity> byAddress = ((CpuRepository) (TypeRepository.CpuLoad.getRepository())).findByAddress("/" + address);
+//        ListIterator<CpuEntity> iterator = byAddress.listIterator();
+//        long time = byAddress.get(0).getTimestamp().getTime();
+//        while (iterator.hasNext()) {
+//            CpuEntity next = iterator.next();
+//            if(time + 20 < next.getTimestamp().getTime()) {
+//                iterator.add(new CpuEntity(next.getAddress(), new Timestamp(time + 15), -1));
+//            }
+//            time += 15;
+//        }
         return byAddress;
     }
 

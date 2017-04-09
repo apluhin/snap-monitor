@@ -8,9 +8,10 @@ public class Util {
 
 
     public static Variable getVariable(ResponseEvent responseEvent) {
-
-        return responseEvent.getResponse().getVariableBindings().get(0).getVariable();
-
-
+        try {
+            return responseEvent.getResponse().getVariableBindings().get(0).getVariable();
+        } catch (Exception e) {
+            throw new RuntimeException("Can't get response", e);
+        }
     }
 }

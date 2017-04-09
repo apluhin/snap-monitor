@@ -23,6 +23,10 @@ public enum TypeRepository {
 
         @Override
         public void saveResult(Object execute, Device key) {
+            if (execute == null) {
+                FactoryRepository.getCpuRepository().save(new CpuEntity(key.getAddress().toString(), Timestamp.valueOf(LocalDateTime.now()), null));
+                return;
+            }
             FactoryRepository.getCpuRepository().save(new CpuEntity(key.getAddress().toString(), Timestamp.valueOf(LocalDateTime.now()), (Integer) execute));
         }
     },
@@ -34,6 +38,10 @@ public enum TypeRepository {
 
         @Override
         public void saveResult(Object execute, Device key) {
+            if (execute == null) {
+                FactoryRepository.getRamRepository().save(new RamEntity(key.getAddress().toString(), null, Timestamp.valueOf(LocalDateTime.now())));
+                return;
+            }
             FactoryRepository.getRamRepository().save(new RamEntity(key.getAddress().toString(), (Long) execute, Timestamp.valueOf(LocalDateTime.now())));
         }
     },

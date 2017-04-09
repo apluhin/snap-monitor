@@ -18,7 +18,6 @@ public class CpuLoad extends AbstractTask {
     public int checkCpuLoad(Device device) throws IOException {
         ResponseEvent responseEvent = sender.sendRequest(device, (command.getOid()), command.getTypeRequest());
         int i = (int) Util.getVariable(responseEvent).toInt();
-        System.out.println(i);
         return i;
     }
 
@@ -27,7 +26,7 @@ public class CpuLoad extends AbstractTask {
         try {
             return checkCpuLoad(device);
         } catch (IOException e) {
-            throw new RuntimeException("err", e);
+            throw new RuntimeException("Can't connect");
         }
     }
 

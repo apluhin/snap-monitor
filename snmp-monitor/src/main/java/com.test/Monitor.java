@@ -1,6 +1,5 @@
 package com.test;
 
-import com.test.controllers.Handler;
 import com.test.criteria.Task;
 import com.test.entity.Device;
 import com.test.enums.Vendor;
@@ -38,10 +37,10 @@ public class Monitor {
     public void beginExecute() {
         new Thread(() -> {
             while (true) {
-                handler.runTasks();
                 try {
+                    handler.runTasks();
                     Thread.sleep(15000);
-                } catch (InterruptedException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -52,7 +51,11 @@ public class Monitor {
         Device next = mapOfDevice.keySet().iterator().next();
         new Thread(() -> {
             while (true) {
-                Vendor.valueOf(next.getVendor().toUpperCase()).getTestTask().execute(next);
+                try {
+                    Vendor.valueOf(next.getVendor().toUpperCase()).getTestTask().execute(next);
+                } catch (Exception e) {
+
+                }
             }
         }).start();
     }
@@ -72,8 +75,10 @@ public class Monitor {
     }
 
     public void addDeviceOnExecute(Device device) {
-        if (mapOfDevice.containsKey(device)) {
-            return;
+        for (Device dev : mapOfDevice.keySet()) {
+            if (dev.getAddress().toString().equalsIgnoreCase(device.getAddress().toString())) {
+                return;
+            }
         }
         mapOfDevice.putIfAbsent(device, new CopyOnWriteArrayList<>());
         mapOfDevice.get(device).add(Vendor.valueOf(device.getVendor()).getCpu1MinuteTask());

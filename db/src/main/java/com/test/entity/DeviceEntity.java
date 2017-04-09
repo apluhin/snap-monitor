@@ -34,4 +34,20 @@ public class DeviceEntity {
                 ", address='" + address + '\'' +
                 '}';
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getVendor() {
+        return vendor;
+    }
+
+    public String getAddress() {
+        return address;
+    }
 }

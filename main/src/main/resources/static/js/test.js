@@ -56,7 +56,7 @@ var Header = React.createClass({
     render: function () {
         return (
             <div className="navbar navbar-default" id="header">
-                <a className="navbar-brand">Translate</a>
+                <a className="navbar-brand">Monitoring</a>
                 <ul style={{cursor: "pointer"}} className="nav navbar-nav" id="menu">
                     <MainLink/>
                     <SomeLink/>
@@ -79,7 +79,7 @@ var MainListOfDevice = React.createClass({
         $("#placeholder").removeClass("non-visible");
         ReactDOM.render(
             <Main address={el}/>,
-            document.getElementById('container1')
+            document.getElementById('container')
         )
         ;
 
@@ -101,7 +101,9 @@ var MainListOfDevice = React.createClass({
             {
 
                 this.state.listDevices.map(function (el, index) {
-                    return <li key={index} onClick={() => console.handlerMain(el.ipAddress)}>{el.ipAddress}</li>;
+                    return <li key={index} onClick={() => console.handlerMain(el.ipAddress)}>{el.ipAddress}
+                    </li>;
+
                 })
             }
         </ul>
@@ -144,21 +146,138 @@ var SomeLink = React.createClass({
     handlerMain: function () {
         $("#placeholder").html("");
         ReactDOM.render(
-            <Nothing/>,
+            <Device/>,
             document.getElementById('container')
         );
 
     },
 
     render: function () {
-        return ( <li onClick={this.handlerMain}><a>Monitoring1</a></li>)
+        return ( <li onClick={this.handlerMain}><a>Devices</a></li>)
     }
 });
 
-var Nothing = React.createClass({
+var Device = React.createClass({
+
+    getInitialState: function () {
+        var hash = {
+            typeHash: null,
+            hashPassword: null
+        }
+        var encryption = {
+            typeEncrypt: null,
+            encryptionPassword: null,
+        }
+        var snmp = {
+            hash: hash,
+            encryption: encryption,
+            version: "none",
+            username: null
+        }
+        var Device = {
+            vendor: null,
+            address: null,
+            snmp: snmp
+        }
+        return {Device: Device}
+    },
+
     render: function () {
-        return <div></div>
+        console.log(this.state.Device.snmp.version)
+        if (this.state.Device.snmp.version == "v3") {
+            return <div>
+                <p>
+                    value="version" v3<select onChange={this.addVersion} type="text">
+                    <option>v3</option>
+                    <option>v1</option>
+                    <option>v2</option>
+                </select>
+                </p>
+                <p>
+                    value="Vendor"Cisco<input onChange={this.addVendor} type="text"/>
+                </p>
+                <p>
+                    value="Address"192.168.0.1<input onChange={this.addAddress} type="text"/>
+                </p>
+
+
+                <p>
+                    value="username"operator<input onChange={this.addUsername} type="text"/>
+                </p>
+                <p>
+                    value="typeHash" MD5<input onChange={this.addTypeHash} type="text"/>
+                </p>
+                <p>
+                    value="HashPassword" AuthPassw0rd<input onChange={this.addHashPassword} type="text"/>
+                </p>
+                <p>
+                    value="typeEncrypt" DES<input onChange={this.addTypeEncrypt} type="text"/>
+                </p>
+                <p>
+                    value="EncryptPassword" EncryptionPassw0rd<input onChange={this.addEncryptPassword} type="text"/>
+                </p>
+                <p>
+                    <input type="button" onClick={this.sendVal}/>
+                </p>
+            </div>
+        } else {
+            return <p>
+                value="version" v3<select onChange={this.addVersion} type="text">
+                <option>v1</option>
+                <option>v2</option>
+                <option>v3</option>
+            </select>
+            </p>;
+        }
+
+    },
+
+    sendVal: function () {
+        var stringify = JSON.stringify(this.state.Device);
+        stringify = '{ "device" : ' + stringify + '}}';
+        $.post("/device?action=add", {device: stringify}, function () {
+
+        }, "json")
+    },
+
+
+    addVendor: function (event) {
+        this.state.Device.vendor = event.target.value
+    },
+
+    addAddress: function (event) {
+        this.state.Device.address = event.target.value
+    },
+
+    addVersion: function (event) {
+        var Dev = this.state.Device;
+        Dev.snmp.version = event.target.value;
+        this.setState({
+            Device: Dev
+        });
+    },
+
+    addUsername: function (event) {
+        this.state.Device.snmp.username = event.target.value
+    },
+
+    addTypeHash: function (event) {
+        this.state.Device.snmp.hash.typeHash = event.target.value
+    },
+
+    addHashPassword: function (event) {
+        this.state.Device.snmp.hash.hashPassword = event.target.value
+
+    },
+
+    addTypeEncrypt: function (event) {
+        this.state.Device.snmp.encryption.typeEncrypt = event.target.value
+    },
+    addEncryptPassword: function (event) {
+        this.state.Device.snmp.encryption.encryptionPassword = event.target.value
     }
+
+
 });
 
 ReactDOM.render(

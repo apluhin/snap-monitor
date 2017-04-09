@@ -7,7 +7,6 @@ import com.test.repository.DeviceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
-import javax.annotation.PostConstruct;
 import java.io.File;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,7 +22,7 @@ public class Test1 {
         repository.save(device);
     }
 
-    @PostConstruct
+
     public void testSave() {
         File xml = new File(System.getProperty("user.home") + "/reports", "snmp.xml");
         List<Device> device = Parse.getDevice(xml);

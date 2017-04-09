@@ -2,6 +2,7 @@ package com.test;
 
 import com.test.controllers.Parse;
 import com.test.entity.Device;
+import com.test.notification.HealthChecker;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +22,8 @@ public class Application {
 
     @Autowired
     Monitor monitor;
+    @Autowired
+    HealthChecker healthChecker;
 
 
     public static void main(String[] args) throws InterruptedException {
@@ -30,12 +33,12 @@ public class Application {
     @PostConstruct
     public void startMonitor() {
         monitor.beginExecute();
-
+        healthChecker.startCheck();
         File xml = new File(System.getProperty("user.home") + "/reports", "snmp.xml");
         List<Device> device = Parse.getDevice(xml);
-        monitor.addDeviceOnExecute(device.get(0));
+        //monitor.addDeviceOnExecute(device.get(0));
         monitor.addDeviceOnExecute(device.get(1));
-        //      monitor.addLoad();
-        // testBean.add();
+
+        //testBean.add();
     }
 }

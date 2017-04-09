@@ -1,5 +1,6 @@
-package com.test.controllers;
+package com.test;
 
+import com.test.controllers.Result;
 import com.test.criteria.Task;
 import com.test.entity.Device;
 import com.test.enums.TypeRepository;
@@ -19,13 +20,13 @@ import java.util.concurrent.CopyOnWriteArrayList;
 public class Handler {
 
 
-    Map<Device, List<Result>> map;
+    private Map<Device, List<Result>> map;
     private Map<Device, List<Task>> deviceListMap;
     private Map<Device, Boolean> mapStatus = new ConcurrentHashMap<>();
 
 
     public Handler(Map<Device, List<Task>> deviceListMap) {
-        this.deviceListMap =  deviceListMap;
+        this.deviceListMap = deviceListMap;
     }
 
     public Handler() {
@@ -41,19 +42,19 @@ public class Handler {
     }
 
     private boolean isConnected(Device device) {
+        Object execute;
         try {
-            Object execute = Vendor.valueOf(device.getVendor().toUpperCase()).getTestTask().execute(device);
-            device.setName(execute.toString());
+            execute = Vendor.valueOf(device.getVendor().toUpperCase()).getTestTask().execute(device);
+            //device.setName(execute.toString());
+            if (mapStatus.get(device) == null) {
+                TypeRepository.sysName.saveResult(execute, device);
+            }
             mapStatus.put(device, true);
-        } catch (NullPointerException | ClassCastException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
             if (mapStatus.get(device) == null) {
                 deviceListMap.remove(device);
-            } else {
-                mapStatus.put(device, false);
-                System.out.println("device was");
             }
-            System.out.println("Can't find");
+            System.out.println("Can't check connect to " + device.getAddress());
             return false;
         }
         return true;
@@ -62,12 +63,10 @@ public class Handler {
     public Map<Device, List<Result>> runTasks() {
         map = new ConcurrentHashMap<>();
         for (Map.Entry<Device, List<Task>> deviceListEntry : deviceListMap.entrySet()) {
-            boolean connected = isConnected(deviceListEntry.getKey());
-            if (mapStatus.get(deviceListEntry.getKey()) == null) {
+            isConnected(deviceListEntry.getKey());
+            if (mapStatus.get(deviceListEntry.getKey()) == null || !mapStatus.get(deviceListEntry.getKey())) {
+                //If now you cant get informatiion from device
                 break;
-            }
-            if (!mapStatus.get(deviceListEntry.getKey())) {
-                System.out.println("now doesnt connect");
             }
             List<Task> value = deviceListEntry.getValue();
             Device key = deviceListEntry.getKey();
@@ -75,8 +74,10 @@ public class Handler {
                 try {
                     Object execute = execute(key, s);
                     TypeRepository.valueOf(s.getName()).saveResult(execute, key);
-                } catch (IOException | NullPointerException e) {
+                } catch (Exception e) {
                     System.out.println("Can't connect to, device now isn't unreacheble " + key.getAddress());
+                    TypeRepository.valueOf(s.getName()).saveResult(null, key);
+
                 }
             });
         }

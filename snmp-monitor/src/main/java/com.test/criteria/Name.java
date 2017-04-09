@@ -20,7 +20,7 @@ public class Name extends AbstractTask {
         try {
             responseEvent = sender.sendRequest(device, command.getOid(), command.getTypeRequest());
             return Util.getVariable(responseEvent).toString();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             throw new NullPointerException("need handle");
         }
     }

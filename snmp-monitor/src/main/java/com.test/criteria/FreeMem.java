@@ -19,7 +19,7 @@ public class FreeMem extends AbstractTask {
         //TODO handle exception
         try {
             return checkFreeRam(device);
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             throw new RuntimeException("Current error", e);
         }
     }
