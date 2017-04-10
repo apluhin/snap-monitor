@@ -2,26 +2,27 @@ package com.test.dto;
 
 import com.test.entity.Device;
 
-import java.util.Map;
-
 public class DeviceDto {
 
     private final String name;
     private final String vendor;
     private final String ipAddress;
-    private Map<String, String> snmpDevice;
+    private final boolean online;
 
-    public DeviceDto(String name, String vendor, String ipAddress, Map<String, String> snmpDevice) {
+
+    public DeviceDto(String name, String vendor, String ipAddress, boolean online) {
         this.name = name;
         this.vendor = vendor;
         this.ipAddress = ipAddress;
-        this.snmpDevice = snmpDevice;
+
+        this.online = online;
     }
 
-    public DeviceDto(Device device) {
+    public DeviceDto(Device device, boolean online) {
         this.name = device.getName();
         this.vendor = device.getVendor();
         this.ipAddress = device.getAddress().toString();
+        this.online = online;
     }
 
     public String getName() {
@@ -34,5 +35,9 @@ public class DeviceDto {
 
     public String getIpAddress() {
         return ipAddress;
+    }
+
+    public boolean isOnline() {
+        return online;
     }
 }

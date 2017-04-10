@@ -8,14 +8,14 @@ import java.net.UnknownHostException;
 public class Device {
 
     private final String vendor;
-    private final InetAddress address;
+    private final String address;
     private final SnmpDevice snmpDevice;
     private String name;
 
 
     public Device(String vendor, String address, String name, SnmpDevice snmpDevice) {
         this.vendor = vendor;
-        this.address = getAddress(address);
+        this.address = address;
         this.name = name;
         this.snmpDevice = snmpDevice;
     }
@@ -37,7 +37,7 @@ public class Device {
         return vendor;
     }
 
-    public InetAddress getAddress() {
+    public String getAddress() {
         return address;
     }
 

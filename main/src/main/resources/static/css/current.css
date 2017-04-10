@@ -2,4 +2,35 @@
     display: none;
 }
 
+.list-group {
+    float: left;
+}
+
+#placeholder {
+    float: right;
+    height: 500px;
+    bottom: auto;
+
+}
+
+#container {
+    float: left;
+
+    bottom: auto;
+
+}
+
+#container1 {
+    float: left;
+
+    bottom: auto;
+}
 /* Large desktop */
+
+.list-group {
+    width: 125px;
+}
+
+#main-panel {
+    margin-left: 15%;
+}

@@ -1,37 +1,124 @@
+function reviewData(data1) {
+    var arr1 = [['Router', 'Load']];
+    for (var i = 0; i < data1.length; i++) {
+        var date = new Date(data1[i].timestamp);
+        var str = date.getMinutes();
+        if (date.getMinutes() < 10) {
+            str = "0" + str;
+        }
+        data1[i].timestamp = date.getHours() + ":" + str;
+        arr1[i + 1] = [data1[i].timestamp, data1[i].load]
+    }
+    if (data1.length == 0) {
+        arr1[1] = ["00:00", 0];
+    }
+    return arr1;
+}
+function convert(str) {
+    str = str + ""
+    if (str.length == 1) {
+        return "0" + str;
+    } else {
+        return str;
+    }
+}
 var Main = React.createClass({
 
 
     getInitialState: function () {
-        return {array: [["Router", "Load"], ["00:00", 0]]}
+
+        var to = new Date();
+        to.setTime(to.getTime() + 360000)
+        var to1 = to.getUTCFullYear() + "-" + convert(to.getMonth() + 1) + "-" + convert(to.getDate()) + " " + convert(to.getHours()) + ":" + convert(to.getMinutes()) + ":00";
+        var a = to.getTime();
+        a = a - 3600000;
+        to.setTime(a)
+
+
+        var from1 = to.getUTCFullYear() + "-" + convert(to.getMonth() + 1) + "-" + convert(to.getDate()) + " " + convert(to.getHours()) + ":" + convert(to.getMinutes()) + ":00";
+        var Data = {
+            array: [["Router", "Load"], ["00:00", 0]],
+            timeTo: to1,
+            timeFrom: from1
+        }
+        return {data: Data}
     },
 
-    re: function () {
-        var a = this.props.address;
+    componentWillUpdate: function (nextProps, nextState) {
+        console.log(nextProps)
+        console.log(nextState)
+
+    },
+
+    componentDidMount: function () {
+        this.send();
+    },
+
+    componentDidUpdate: function (prevProps, prevState) {
+        if (this.state.data.timeFrom.length == 19 && this.state.data.timeTo.length == 19) {
+            this.send();
+        }
+    },
+
+    generateView: function () {
+        var a = this.props.device.ipAddress;
         $.get("/device?action=cpu&address=" + a.replace("/", "")).done(function (data1) {
-            var arr1 = [['Router', 'Load']];
-            for (var i = 0; i < data1.length; i++) {
-                var date = new Date(data1[i].timestamp);
-                data1[i].timestamp = date.getHours() + ":" + date.getMinutes();
-                arr1[i + 1] = [data1[i].timestamp, data1[i].load]
-            }
-            test(arr1)
+            var arr1 = reviewData(data1);
+            generateTable(arr1)
         });
 
     },
 
+    setFrom: function () {
+        this.state.data.timeFrom = event.target.value;
+        console.log(this.state.data.timeFrom)
+        var Data = {
+            array: this.state.data.array,
+            timeTo: this.state.data.timeTo,
+            timeFrom: event.target.value
+        }
+        this.setState({data: Data});
+    },
+
+    setTo: function () {
+        var Data = {
+            array: this.state.data.array,
+            timeTo: event.target.value,
+            timeFrom: this.state.data.timeFrom
+        }
+        this.setState({data: Data});
+    },
+
+    send: function () {
+        $.get('/device?action=cpu_interval&address=' + this.props.device.ipAddress.replace("/", "") + '&from=' + this.state.data.timeFrom + "&to=" + this.state.data.timeTo).done(function (data) {
+            generateTable(reviewData(data))
+        }.bind(this));
+    },
 
     render: function () {
-        this.re();
+
+        var str = this.props.device.vendor.toLowerCase();
         if (this.state.typeRender == 'nothing') {
             return <div></div>
         }
-        return (<h onClick={this.re}>Load</h>);
+        return (<div id="device-panel">
+            <div id="main-panel">
+
+                Имя устройства: <b>{this.props.device.name}</b><br></br>
+                IP адрес устройства: <b>{this.props.device.ipAddress}</b><br></br>
+                Вендор <b>{str}</b><br></br>
+                <b>Выбор времени</b><br></br>
+                Загрузка с <input type="text" onChange={this.setFrom} value={this.state.data.timeFrom}/> до <input
+                onChange={this.setTo} value={this.state.data.timeTo} type="text"/><br></br>
+                <b onClick={this.send}>Отправить</b><br></br>
+            </div>
+        </div>);
     }
 
 });
 
 
-function test(data) {
+function generateTable(data) {
     google.charts.load('current', {'packages': ['corechart']});
     google.charts.setOnLoadCallback(drawChart);
 
@@ -76,10 +163,11 @@ var MainListOfDevice = React.createClass({
 
     handlerMain: function (el) {
         $("#container").removeClass("non-visible");
+        $("#container1").removeClass("non-visible");
         $("#placeholder").removeClass("non-visible");
         ReactDOM.render(
-            <Main address={el}/>,
-            document.getElementById('container')
+            <Main device={el}/>,
+            document.getElementById('container1')
         )
         ;
 
@@ -101,8 +189,17 @@ var MainListOfDevice = React.createClass({
             {
 
                 this.state.listDevices.map(function (el, index) {
-                    return <li key={index} onClick={() => console.handlerMain(el.ipAddress)}>{el.ipAddress}
-                    </li>;
+
+                    if (el.online == false) {
+                        return <li className="list-group-item" style={{'background': 'red'}} key={index}
+                                   onClick={() => console.handlerMain(el)}>{el.ipAddress}
+                        </li>
+                    } else {
+                        return <li className="list-group-item" key={index}
+                                   onClick={() => console.handlerMain(el)}>{el.ipAddress}
+                        </li>
+                    }
+
 
                 })
             }
@@ -121,6 +218,8 @@ var MainLink = React.createClass({
     },
 
     handlerMain: function () {
+        $("#container").removeClass("non-visible");
+        $("#container1").addClass("non-visible")
         ReactDOM.render(
             <MainListOfDevice/>,
             document.getElementById('container')
@@ -145,9 +244,11 @@ var SomeLink = React.createClass({
 
     handlerMain: function () {
         $("#placeholder").html("");
+        $("#container1").removeClass("non-visible");
+        $("#container").addClass("non-visible");
         ReactDOM.render(
             <Device/>,
-            document.getElementById('container')
+            document.getElementById('container1')
         );
 
     },
@@ -160,6 +261,8 @@ var SomeLink = React.createClass({
 var Device = React.createClass({
 
     getInitialState: function () {
+        $("#container").addClass("non-visible");
+
         var hash = {
             typeHash: null,
             hashPassword: null

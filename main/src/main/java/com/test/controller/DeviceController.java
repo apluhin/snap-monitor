@@ -5,6 +5,7 @@ import com.test.dto.DeviceDto;
 import com.test.entity.CpuEntity;
 import com.test.entity.RamEntity;
 import com.test.service.DeviceService;
+import org.apache.catalina.servlet4preview.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,10 +32,16 @@ public class DeviceController {
         return deviceService.getListDevices();
     }
 
+    @RequestMapping(params = "action=cpu_interval", method = RequestMethod.GET)
+    @ResponseBody
+    public List<CpuEntity> getListDeviceByInterval(String address, String from, String to) {
+        return deviceService.getCpuByInterval(address, from, to);
+    }
+
     @RequestMapping(params = "action=add", method = RequestMethod.POST)
     @ResponseBody
-    public String addDevice(String device) throws IOException {
-        return deviceService.addDevice(device);
+    public String addDevice(HttpServletRequest request) throws IOException {
+        return deviceService.addDevice(request.getReader().lines().reduce("", (s1, s2) -> s1 + s2));
     }
 
     @RequestMapping(params = "action=cpu", method = RequestMethod.GET)

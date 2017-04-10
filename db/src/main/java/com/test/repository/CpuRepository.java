@@ -14,5 +14,8 @@ public interface CpuRepository extends JpaRepository<CpuEntity, Long> {
     @Query(value = "select entity from CpuEntity entity where entity.address like ?1 and entity.timestamp > ?2")
     List<CpuEntity> findByAddressAndTime(String address, Timestamp timestamp);
 
+    @Query(value = "select entity from CpuEntity entity where entity.address like ?1 and entity.timestamp > ?2 and entity.timestamp < ?3")
+    List<CpuEntity> findByAddressAndTwoTimestamp(String address, Timestamp from, Timestamp to);
+
 
 }

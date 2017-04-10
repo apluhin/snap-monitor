@@ -54,7 +54,7 @@ public class Handler {
             if (mapStatus.get(device) == null) {
                 deviceListMap.remove(device);
             }
-            System.out.println("Can't check connect to " + device.getAddress());
+            // System.out.println("Can't check connect to " + device.getAddress());
             return false;
         }
         return true;
@@ -75,7 +75,7 @@ public class Handler {
                     Object execute = execute(key, s);
                     TypeRepository.valueOf(s.getName()).saveResult(execute, key);
                 } catch (Exception e) {
-                    System.out.println("Can't connect to, device now isn't unreacheble " + key.getAddress());
+                    //  System.out.println("Can't connect to, device now isn't unreacheble " + key.getAddress());
                     TypeRepository.valueOf(s.getName()).saveResult(null, key);
 
                 }

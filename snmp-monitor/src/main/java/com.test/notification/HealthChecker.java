@@ -36,18 +36,32 @@ public class HealthChecker {
     private void checkOnline() {
 
         List<DeviceEntity> all = deviceRepository.findAll();
+
         for (DeviceEntity device : all) {
             LocalDateTime dateTime = LocalDateTime.now().minusMinutes(minuteWaiting);
             Timestamp timestamp = Timestamp.valueOf(dateTime);
             List<CpuEntity> byAddressAndTime = cpuRepository.
                     findByAddressAndTime(device.getAddress(), timestamp);
 
-            if (byAddressAndTime.size() == 0) {
-                System.out.println("Error device doest'n");
+            if (!foundNotNull(byAddressAndTime)) {
+                System.out.println("Error, device unavailible");
+                deviceRepository.updateOfflineStatus(device.getAddress());
             } else {
                 //      System.out.println(byAddressAndTime.size() + "   size");
+                if (!device.isOnline()) {
+                    deviceRepository.updateOnlineStatus(device.getAddress());
+                }
             }
         }
+    }
+
+    private boolean foundNotNull(List<CpuEntity> byAddressAndTime) {
+        for (CpuEntity ent : byAddressAndTime) {
+            if (ent.getLoad() != null) {
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -15,6 +15,7 @@ public class DeviceEntity {
     private String name;
     private String vendor;
     private String address;
+    private boolean online = false;
 
     public DeviceEntity() {
     }
@@ -49,5 +50,9 @@ public class DeviceEntity {
 
     public String getAddress() {
         return address;
+    }
+
+    public boolean isOnline() {
+        return online;
     }
 }

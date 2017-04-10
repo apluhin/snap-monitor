@@ -8,12 +8,14 @@ import com.test.entity.DeviceEntity;
 import com.test.entity.RamEntity;
 import com.test.enums.TypeRepository;
 import com.test.repository.CpuRepository;
+import com.test.repository.DeviceRepository;
 import com.test.repository.RamRepository;
 import com.test.snmp.SnmpDevice;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,8 +24,9 @@ import java.util.stream.Collectors;
 @Service
 public class DeviceService {
 
-
     private final Monitor monitor;
+    @Autowired
+    DeviceRepository deviceRepository;
 
     @Autowired
     public DeviceService(Monitor monitor) {
@@ -31,9 +34,9 @@ public class DeviceService {
     }
 
     public List<DeviceDto> getListDevices() {
-        return monitor.getListDevices().
+        return deviceRepository.findAll().
                 stream().
-                map(DeviceDto::new).
+                map(deviceEntity -> new DeviceDto(deviceEntity.getName(), deviceEntity.getVendor(), deviceEntity.getAddress(), deviceEntity.isOnline())).
                 collect(Collectors.toList());
     }
 
@@ -64,22 +67,20 @@ public class DeviceService {
     }
 
     public List<CpuEntity> getCpuMonitoring(String address) {
-        List<CpuEntity> byAddress = ((CpuRepository) (TypeRepository.CpuLoad.getRepository())).findByAddress("/" + address);
-//        ListIterator<CpuEntity> iterator = byAddress.listIterator();
-//        long time = byAddress.get(0).getTimestamp().getTime();
-//        while (iterator.hasNext()) {
-//            CpuEntity next = iterator.next();
-//            if(time + 20 < next.getTimestamp().getTime()) {
-//                iterator.add(new CpuEntity(next.getAddress(), new Timestamp(time + 15), -1));
-//            }
-//            time += 15;
-//        }
+        List<CpuEntity> byAddress = ((CpuRepository) (TypeRepository.CpuLoad.getRepository())).findByAddress(address);
         return byAddress;
     }
 
     public List<RamEntity> getRamMonitoring(String address) {
-        List<RamEntity> byAddress = ((RamRepository) (TypeRepository.FreeMem.getRepository())).findByAddress("/" + address);
+        List<RamEntity> byAddress = ((RamRepository) (TypeRepository.FreeMem.getRepository())).findByAddress(address);
         return byAddress;
     }
 
+    public List<CpuEntity> getCpuByInterval(String address, String from, String to) {
+        Timestamp timestampFrom = Timestamp.valueOf(from);
+        Timestamp timestampTo = Timestamp.valueOf(to);
+        List<CpuEntity> byAddressAndTwoTimestamp = ((CpuRepository) (TypeRepository.CpuLoad.getRepository())).
+                findByAddressAndTwoTimestamp(address, timestampFrom, timestampTo);
+        return byAddressAndTwoTimestamp;
+    }
 }
