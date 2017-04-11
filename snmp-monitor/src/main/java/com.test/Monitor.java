@@ -39,7 +39,7 @@ public class Monitor {
             while (true) {
                 try {
                     handler.runTasks();
-                    Thread.sleep(15000);
+                    Thread.sleep(10000);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

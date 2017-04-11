@@ -14,11 +14,14 @@ import com.test.snmp.SnmpDevice;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentMap;
 import java.util.stream.Collectors;
 
 @Service
@@ -27,17 +30,30 @@ public class DeviceService {
     private final Monitor monitor;
     @Autowired
     DeviceRepository deviceRepository;
+    @Autowired
+    RamRepository ramRepository;
 
     @Autowired
     public DeviceService(Monitor monitor) {
         this.monitor = monitor;
     }
 
+    @Transactional
     public List<DeviceDto> getListDevices() {
-        return deviceRepository.findAll().
+        List<Object> ramByEveryAddress = ramRepository.getRamByEveryAddress();
+        for (int i = 0; i < ramByEveryAddress.size(); i++) {
+            System.out.println(((Object[]) ramByEveryAddress.get(i)).length);
+        }
+        ConcurrentMap<String, BigInteger> collect = ramByEveryAddress.stream().map(o -> (Object[]) o)
+                .filter(objects -> objects[1] != null)
+                .collect(Collectors.toConcurrentMap(d -> (String) (d[0]), d -> (BigInteger) d[1]));
+        List<DeviceEntity> all = deviceRepository.findAll();
+        return all.
                 stream().
-                map(deviceEntity -> new DeviceDto(deviceEntity.getName(), deviceEntity.getVendor(), deviceEntity.getAddress(), deviceEntity.isOnline())).
+                map(deviceEntity -> new DeviceDto(deviceEntity.getName(), deviceEntity.getVendor(), deviceEntity.getAddress(), collect.getOrDefault(deviceEntity.getAddress(), null), deviceEntity.isOnline())).
                 collect(Collectors.toList());
+
+
     }
 
     public String addDevice(String mapOfJson) {
