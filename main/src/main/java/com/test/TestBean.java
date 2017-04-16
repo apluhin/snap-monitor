@@ -32,9 +32,9 @@ public class TestBean {
         List<Device> device = Parse.getDevice(xml);
         deviceRepository.save(service.transform(device));
         List<CpuEntity> e = new ArrayList<>();
-        for (long i = 10000; i > 0; i--) {
-            e.add(new CpuEntity("/192.168.0.1", Timestamp.valueOf(LocalDateTime.now().minusMinutes(i)), (int) (50 - Math.random() * 5)));
-            e.add(new CpuEntity("/192.168.0.2", Timestamp.valueOf(LocalDateTime.now().minusMinutes(i)), (int) (50 - Math.random() * 10)));
+        for (long i = 100; i > 0; i--) {
+            e.add(new CpuEntity("192.168.0.1", Timestamp.valueOf(LocalDateTime.now().minusMinutes(i)), (int) (50 - Math.random() * 5)));
+            e.add(new CpuEntity("192.168.1.1", Timestamp.valueOf(LocalDateTime.now().minusMinutes(i)), (int) (50 - Math.random() * 10)));
         }
         repository.save(e);
     }

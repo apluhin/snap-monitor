@@ -76,10 +76,11 @@ public class Monitor {
 
     public void addDeviceOnExecute(Device device) {
         for (Device dev : mapOfDevice.keySet()) {
-            if (dev.getAddress().toString().equalsIgnoreCase(device.getAddress().toString())) {
+            if (dev.getAddress().equalsIgnoreCase(device.getAddress())) {
                 return;
             }
         }
+        System.out.println("Add");
         mapOfDevice.putIfAbsent(device, new CopyOnWriteArrayList<>());
         mapOfDevice.get(device).add(Vendor.valueOf(device.getVendor()).getCpu1MinuteTask());
         mapOfDevice.get(device).add(Vendor.valueOf(device.getVendor()).getFreeMemory());

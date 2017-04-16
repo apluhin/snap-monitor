@@ -1,6 +1,7 @@
 package com.test.service;
 
 import com.test.Monitor;
+import com.test.controllers.Parse;
 import com.test.dto.DeviceDto;
 import com.test.entity.CpuEntity;
 import com.test.entity.Device;
@@ -15,7 +16,9 @@ import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.*;
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -98,5 +101,27 @@ public class DeviceService {
         List<CpuEntity> byAddressAndTwoTimestamp = ((CpuRepository) (TypeRepository.CpuLoad.getRepository())).
                 findByAddressAndTwoTimestamp(address, timestampFrom, timestampTo);
         return byAddressAndTwoTimestamp;
+    }
+
+    public void addDevices(MultipartFile file) throws IOException {
+        File file1 = new File("in.xml");
+
+        saveFile(file, file1);
+        System.out.println(file1.getAbsoluteFile());
+        List<Device> device = Parse.getDevice(file1);
+        device.forEach(monitor::addDeviceOnExecute);
+    }
+
+    public void saveFile(MultipartFile file, File dest) throws IOException {
+        dest.createNewFile();
+        FileWriter writer = new FileWriter(dest);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(file.getInputStream()));
+        while (reader.ready()) {
+            writer.append(reader.readLine());
+            writer.flush();
+        }
+        writer.close();
+        reader.close();
+
     }
 }

@@ -44,11 +44,6 @@ var Main = React.createClass({
         return {data: Data}
     },
 
-    componentWillUpdate: function (nextProps, nextState) {
-        console.log(nextProps)
-        console.log(nextState)
-
-    },
 
     componentDidMount: function () {
         this.send();
@@ -69,9 +64,9 @@ var Main = React.createClass({
 
     },
 
-    setFrom: function () {
+    setFrom: function (event) {
+        console.log(event.target.value)
         this.state.data.timeFrom = event.target.value;
-        console.log(this.state.data.timeFrom)
         var Data = {
             array: this.state.data.array,
             timeTo: this.state.data.timeTo,
@@ -80,7 +75,7 @@ var Main = React.createClass({
         this.setState({data: Data});
     },
 
-    setTo: function () {
+    setTo: function (event) {
         var Data = {
             array: this.state.data.array,
             timeTo: event.target.value,
@@ -108,7 +103,7 @@ var Main = React.createClass({
                 IP адрес устройства: <b>{this.props.device.ipAddress}</b><br></br>
                 Вендор <b>{str}</b><br></br>
                 <b>Выбор времени</b><br></br>
-                Загрузка с <input type="text" onChange={this.setFrom} value={this.state.data.timeFrom}/> до <input
+                Загрузка с <input onChange={this.setFrom} value={this.state.data.timeFrom} type="text"/> до <input
                 onChange={this.setTo} value={this.state.data.timeTo} type="text"/><br></br>
                 <b onClick={this.send}>Отправить</b><br></br>
             </div>
@@ -263,121 +258,46 @@ var Device = React.createClass({
     getInitialState: function () {
         $("#container").addClass("non-visible");
 
-        var hash = {
-            typeHash: null,
-            hashPassword: null
-        }
-        var encryption = {
-            typeEncrypt: null,
-            encryptionPassword: null,
-        }
-        var snmp = {
-            hash: hash,
-            encryption: encryption,
-            version: "none",
-            username: null
-        }
-        var Device = {
-            vendor: null,
-            address: null,
-            snmp: snmp
-        }
-        return {Device: Device}
+        return {File: null}
     },
 
     render: function () {
-        console.log(this.state.Device.snmp.version)
-        if (this.state.Device.snmp.version == "v3") {
-            return <div>
-                <p>
-                    value="version" v3<select onChange={this.addVersion} type="text">
-                    <option>v3</option>
-                    <option>v1</option>
-                    <option>v2</option>
-                </select>
-                </p>
-                <p>
-                    value="Vendor"Cisco<input onChange={this.addVendor} type="text"/>
-                </p>
-                <p>
-                    value="Address"192.168.0.1<input onChange={this.addAddress} type="text"/>
-                </p>
+        return <div>
+            <p>
+                <input type="file" onChange={this.setFile}/>
+            </p>
+            <p>
+                <input type="button" onClick={this.send}/>
+            </p>
+        </div>
 
-
-                <p>
-                    value="username"operator<input onChange={this.addUsername} type="text"/>
-                </p>
-                <p>
-                    value="typeHash" MD5<input onChange={this.addTypeHash} type="text"/>
-                </p>
-                <p>
-                    value="HashPassword" AuthPassw0rd<input onChange={this.addHashPassword} type="text"/>
-                </p>
-                <p>
-                    value="typeEncrypt" DES<input onChange={this.addTypeEncrypt} type="text"/>
-                </p>
-                <p>
-                    value="EncryptPassword" EncryptionPassw0rd<input onChange={this.addEncryptPassword} type="text"/>
-                </p>
-                <p>
-                    <input type="button" onClick={this.sendVal}/>
-                </p>
-            </div>
-        } else {
-            return <p>
-                value="version" v3<select onChange={this.addVersion} type="text">
-                <option>v1</option>
-                <option>v2</option>
-                <option>v3</option>
-            </select>
-            </p>;
-        }
 
     },
 
-    sendVal: function () {
-        var stringify = JSON.stringify(this.state.Device);
-        stringify = '{ "device" : ' + stringify + '}}';
-        $.post("/device?action=add", {device: stringify}, function () {
+    setFile: function (event) {
+        this.setState({File: event.target.files[0]})
+        console.log()
 
-        }, "json")
     },
 
-
-    addVendor: function (event) {
-        this.state.Device.vendor = event.target.value
-    },
-
-    addAddress: function (event) {
-        this.state.Device.address = event.target.value
-    },
-
-    addVersion: function (event) {
-        var Dev = this.state.Device;
-        Dev.snmp.version = event.target.value;
-        this.setState({
-            Device: Dev
+    send: function () {
+        console.log(this.state.File)
+        var formData = new FormData();
+        formData.append('file', this.state.File)
+        $.ajax({
+            type: 'POST',
+            url: '/device?action=add',
+            data: formData,
+            processData: false,
+            contentType: false,
+            dataType: "json",
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (data) {
+                console.log(data);
+            }
         });
-    },
-
-    addUsername: function (event) {
-        this.state.Device.snmp.username = event.target.value
-    },
-
-    addTypeHash: function (event) {
-        this.state.Device.snmp.hash.typeHash = event.target.value
-    },
-
-    addHashPassword: function (event) {
-        this.state.Device.snmp.hash.hashPassword = event.target.value
-
-    },
-
-    addTypeEncrypt: function (event) {
-        this.state.Device.snmp.encryption.typeEncrypt = event.target.value
-    },
-    addEncryptPassword: function (event) {
-        this.state.Device.snmp.encryption.encryptionPassword = event.target.value
     }
 
 
