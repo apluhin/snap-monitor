@@ -45,7 +45,7 @@ public class DeviceService {
     public List<DeviceDto> getListDevices() {
         List<Object> ramByEveryAddress = ramRepository.getRamByEveryAddress();
         for (int i = 0; i < ramByEveryAddress.size(); i++) {
-            System.out.println(((Object[]) ramByEveryAddress.get(i)).length);
+            //System.out.println(((Object[]) ramByEveryAddress.get(i)).length);
         }
         ConcurrentMap<String, BigInteger> collect = ramByEveryAddress.stream().map(o -> (Object[]) o)
                 .filter(objects -> objects[1] != null)

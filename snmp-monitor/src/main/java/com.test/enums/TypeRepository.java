@@ -48,7 +48,6 @@ public enum TypeRepository {
     sysName {
         @Override
         public JpaRepository getRepository() {
-            System.out.println(FactoryRepository.getDeviceRepository());
             return FactoryRepository.getDeviceRepository();
         }
 

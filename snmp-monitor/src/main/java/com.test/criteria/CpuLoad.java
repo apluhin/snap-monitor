@@ -34,4 +34,6 @@ public class CpuLoad extends AbstractTask {
     public String getName() {
         return "CpuLoad";
     }
+
+
 }
