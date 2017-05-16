@@ -1,3 +1,5 @@
+var global = true
+
 function reviewData(data1) {
     var arr1 = [['Router', 'Load']];
     for (var i = 0; i < data1.length; i++) {
@@ -6,7 +8,7 @@ function reviewData(data1) {
         if (date.getMinutes() < 10) {
             str = "0" + str;
         }
-        data1[i].timestamp = date.getHours() + ":" + str;
+        data1[i].timestamp = date;
         arr1[i + 1] = [data1[i].timestamp, data1[i].load]
     }
     if (data1.length == 0) {
@@ -25,6 +27,7 @@ function convert(str) {
 var Main = React.createClass({
 
 
+
     getInitialState: function () {
 
         var to = new Date();
@@ -39,7 +42,8 @@ var Main = React.createClass({
         var Data = {
             array: [["Router", "Load"], ["00:00", 0]],
             timeTo: to1,
-            timeFrom: from1
+            timeFrom: from1,
+            up: true
         }
         return {data: Data}
     },
@@ -56,8 +60,8 @@ var Main = React.createClass({
     },
 
     generateView: function () {
-        var a = this.props.device.ipAddress;
-        $.get("/device?action=cpu&address=" + a.replace("/", "")).done(function (data1) {
+        var a = this.props.device.id;
+        $.get("/device?action=cpu&id=" + a).done(function (data1) {
             var arr1 = reviewData(data1);
             generateTable(arr1)
         });
@@ -70,7 +74,7 @@ var Main = React.createClass({
         var Data = {
             array: this.state.data.array,
             timeTo: this.state.data.timeTo,
-            timeFrom: event.target.value
+            timeFrom: event.target.value,
         }
         this.setState({data: Data});
     },
@@ -85,12 +89,27 @@ var Main = React.createClass({
     },
 
     send: function () {
-        $.get('/device?action=cpu_interval&address=' + this.props.device.ipAddress.replace("/", "") + '&from=' + this.state.data.timeFrom + "&to=" + this.state.data.timeTo).done(function (data) {
+        $.get('/device?action=cpu_interval&id=' + this.props.device.id + '&from=' + this.state.data.timeFrom + "&to=" + this.state.data.timeTo).done(function (data) {
             generateTable(reviewData(data))
         }.bind(this));
     },
 
+
+    componentWillMount: function () {
+        console.log('globa' + global)
+        console.log("HEEEE")
+        if (global) {
+            global = false;
+            window.setInterval(function () {
+                this.send();
+                console.log("1213")
+            }.bind(this), 15000);
+        }
+    },
+
+
     render: function () {
+        $("#placeholder").removeClass("non-visible");
 
         var str = this.props.device.vendor.toLowerCase();
         if (this.state.typeRender == 'nothing') {
@@ -105,7 +124,7 @@ var Main = React.createClass({
                 <b>Выбор времени</b><br></br>
                 Загрузка с <input onChange={this.setFrom} value={this.state.data.timeFrom} type="text"/> до <input
                 onChange={this.setTo} value={this.state.data.timeTo} type="text"/><br></br>
-                <b onClick={this.send}>Отправить</b><br></br>
+
             </div>
         </div>);
     }
@@ -118,13 +137,22 @@ function generateTable(data) {
     google.charts.setOnLoadCallback(drawChart);
 
     function drawChart() {
+        var point = true;
+        if (data.length > 125) {
+            point = false;
+        }
 
         var d = google.visualization.arrayToDataTable(data);
 
         var options = {
             title: 'Load',
-            hAxis: {title: 'Time', titleTextStyle: {color: '#333'}},
-            vAxis: {minValue: 0}
+            hAxis: {title: 'Time', titleTextStyle: {color: '#333'}, format: 'M/d hh:mm'},
+            vAxis: {title: 'Load %', minValue: 0},
+            pointsVisible: point,
+            chartArea: {width: '85%', height: '75%'},
+            legend: {position: 'in'},
+
+
         };
 
         var chart = new google.visualization.AreaChart(document.getElementById('placeholder'));
@@ -159,7 +187,6 @@ var MainListOfDevice = React.createClass({
     handlerMain: function (el) {
         $("#container").removeClass("non-visible");
         $("#container1").removeClass("non-visible");
-        $("#placeholder").removeClass("non-visible");
         ReactDOM.render(
             <Main device={el}/>,
             document.getElementById('container1')
@@ -168,30 +195,46 @@ var MainListOfDevice = React.createClass({
 
     },
 
-    getInitialState: function () {
-        return {listDevices: []}
-    },
-
-    componentDidMount: function () {
+    rerender: function () {
         $.get('/device?action=all').done(function (data) {
             this.setState({listDevices: data});
         }.bind(this));
     },
 
+    getInitialState: function () {
+        return {listDevices: []}
+    },
+
+    componentDidMount: function () {
+        this.rerender();
+    },
+
+    componentWillMount: function () {
+        window.setInterval(function () {
+            this.rerender();
+        }.bind(this), 10000);
+    },
+
+
     render: function () {
         var console = this;
+
         return <ul id="list-texts" className="list-group">
             {
 
                 this.state.listDevices.map(function (el, index) {
+                    var str = el.ipAddress
+                    if (el.name != null) {
+                        str = str + " " + el.name
+                    }
 
                     if (el.online == false) {
                         return <li className="list-group-item" style={{'background': 'red'}} key={index}
-                                   onClick={() => console.handlerMain(el)}>{el.ipAddress}
+                                   onClick={() => console.handlerMain(el)}>{str}
                         </li>
                     } else {
                         return <li className="list-group-item" key={index}
-                                   onClick={() => console.handlerMain(el)}>{el.ipAddress}
+                                   onClick={() => console.handlerMain(el)}>{str}
                         </li>
                     }
 
@@ -215,6 +258,7 @@ var MainLink = React.createClass({
     handlerMain: function () {
         $("#container").removeClass("non-visible");
         $("#container1").addClass("non-visible")
+        $("#placeholder").addClass("non-visible")
         ReactDOM.render(
             <MainListOfDevice/>,
             document.getElementById('container')
@@ -239,6 +283,7 @@ var SomeLink = React.createClass({
 
     handlerMain: function () {
         $("#placeholder").html("");
+        $("#placeholder").addClass("non-visible");
         $("#container1").removeClass("non-visible");
         $("#container").addClass("non-visible");
         ReactDOM.render(
